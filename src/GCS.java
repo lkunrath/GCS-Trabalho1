@@ -4,7 +4,6 @@ import src.Entidades.Administrador;
 import src.Entidades.Medico;
 import src.Entidades.Paciente;
 import src.Enums.TipoUsuario;
-import src.Models.Usuario;
 
 import java.util.Scanner;
 
@@ -54,6 +53,7 @@ public class GCS {
                 }
             } catch (NumberFormatException e) {
                 System.out.println("\nValor invalido\n");
+                res = -1;
             }
         }
         return usuario;
