@@ -4,6 +4,7 @@ import src.Entidades.Administrador;
 import src.Entidades.Medico;
 import src.Entidades.Paciente;
 import src.Enums.TipoUsuario;
+import src.Models.Usuario;
 
 import java.util.Scanner;
 
@@ -13,6 +14,10 @@ public class GCS {
 
     public void executa() {
         Usuario usuarioAtual = selecionaUsuarioAtual(sc);
+        if(usuarioAtual instanceof Medico){System.out.println("Logado como Medico");} //SOP apenas para ver se funciona, pode trocar por metodo
+        if(usuarioAtual instanceof Administrador){System.out.println("Logado como Administrado");} //SOP apenas para ver se funciona, pode trocar por metodo
+        if(usuarioAtual instanceof Paciente){System.out.println("Logado como Paciente");} //SOP apenas para ver se funciona, pode trocar por metodo
+
     }
 
     private Usuario selecionaUsuarioAtual(Scanner sc) {
