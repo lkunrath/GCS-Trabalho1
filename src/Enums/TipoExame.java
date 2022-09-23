@@ -1,0 +1,14 @@
+package src.Enums;
+
+public enum TipoExame {
+    HEMOGRAMA,
+    GLICEMIA,
+    COLESTEROL,
+    CREATINA,
+    ELETROCARDIOGRAMA,
+    TESTE_ERGOMETRICO,
+    ECOCARDIOGRAMA,
+    RAIO_X,
+    RADIOGRAFIA,
+    TOMOGRAFIA
+    }
