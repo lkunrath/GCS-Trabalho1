@@ -6,16 +6,16 @@ import java.util.Date;
 
 public class Exame {
 
-    private static int id = 0;
-    private String nomeExame;
+    private static int globalId = 0;
+    private final int id;
     private Date dataCadastro;
     private Medico medico;
     private Paciente paciente;
     private TipoExame tipoExame;
 
-    public Exame(String nomeExame, Date dataCadastro, Medico medico, Paciente paciente, TipoExame tipoExame) {
-        id += 1;
-        this.nomeExame = nomeExame;
+    public Exame(Date dataCadastro, Medico medico, Paciente paciente, TipoExame tipoExame) {
+        id = globalId;
+        ++globalId;
         this.dataCadastro = dataCadastro;
         this.medico = medico;
         this.paciente = paciente;
@@ -24,14 +24,6 @@ public class Exame {
 
     public int getId() {
         return id;
-    }
-
-    public String getNomeExame() {
-        return nomeExame;
-    }
-
-    public void setNomeExame(String nomeExame) {
-        this.nomeExame = nomeExame;
     }
 
     public Date getDataCadastro() {
