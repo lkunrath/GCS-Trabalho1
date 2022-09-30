@@ -50,9 +50,32 @@ public class GCS {
                         usuario = new Paciente(nome, TipoUsuario.PACIENTE);
                     }
                     case 3 -> {
+<<<<<<< Updated upstream
                         System.out.print("Nome do administrador: ");
                         nome = sc.nextLine();
                         usuario = new Administrador(nome, TipoUsuario.ADMINISTRADOR);
+=======
+                        System.out.print( "Nome do administrador: " );
+                        nome = sc.nextLine( );
+                        usuario = new Administrador( nome, TipoUsuario.ADMINISTRADOR );
+                        administradores.add( (Administrador) usuario);
+                        /*
+                         * System.out.println("Caso queira buscar um Paciente ou usuário aperte 1");
+                         * 
+                         *     
+                         * 
+                         *  int OpcaoBusca = sc.nextInt();
+                         *  switch(OpcaoBusca) {
+                         *  case 1 -> {
+                         *  System.out.println("Informe o nome do paciente");
+                         *  nome = sc.nextLine( );
+                         *  
+                         *  
+                         * 
+                         * }
+                         * }
+                         */
+>>>>>>> Stashed changes
                     }
                     default -> throw new NumberFormatException();
                 }
