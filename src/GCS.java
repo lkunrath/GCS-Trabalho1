@@ -10,7 +10,10 @@ import java.util.Scanner;
 
 public class GCS {
 
+    public String[] listaPac;
+    public String[] listaMed;
     Scanner sc;
+    
 
     public void executa() {
         Usuario usuarioAtual = selecionaUsuarioAtual(sc);
@@ -21,10 +24,12 @@ public class GCS {
     }
 
     private Usuario selecionaUsuarioAtual(Scanner sc) {
+        
         sc = new Scanner(System.in);
         Usuario usuario = null;
         int res = -1;
         String nome;
+        
 
         while ( res == -1 ) {
             System.out.println("""
@@ -55,6 +60,31 @@ public class GCS {
                         usuario = new Administrador(nome, TipoUsuario.ADMINISTRADOR);
                         System.out.println("Você deseja buscar um Médico ou usuário?: ");
                         System.out.println("----- MENU ----- ");
+                        System.out.println("Opção 1: Buscar Paciente");
+                        System.out.println("Opção 2: Buscar Médico");
+                        int opcao = sc.nextInt();
+                        switch(opcao) {
+                            
+                            case 1: 
+                            System.out.println("Digite o nome do paciente: ");
+                            String nomeP = sc.nextLine();
+                            if(buscaPaciente(nomeP)){
+                                System.out.println("Este usuário é um paciente");
+                            } else {
+                                System.out.println("Paciente não encontrado");
+                            }
+                            break;
+                            
+                            case 2: 
+                            System.out.println("Digite o nome do médico: ");
+                            String nomeM = sc.nextLine();
+                            if(buscaMedico(nomeM)){
+                                System.out.println("Este usuário é um médico");
+                            } else {
+                                System.out.println("Médico não encontrado");
+                            }
+                            break; 
+                        }
                     }
                     default -> throw new NumberFormatException();
                 }
@@ -64,5 +94,8 @@ public class GCS {
             }
         }
         return usuario;
+    
     }
+    
+    
 }

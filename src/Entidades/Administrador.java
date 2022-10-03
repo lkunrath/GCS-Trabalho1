@@ -4,8 +4,8 @@ import src.Models.Usuario;
 
 public class Administrador extends Usuario {
 
-    private String[] listaPac;
-    private String[] listaMed;
+    public String[] listaPac;
+    public String[] listaMed;
     private int tamanho;
     
     public Administrador(String nome, TipoUsuario tipoUsuario) {
