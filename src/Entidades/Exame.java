@@ -57,4 +57,5 @@ public class Exame {
     public void setTipoExame(TipoExame tipoExame) {
         this.tipoExame = tipoExame;
     }
+
 }
