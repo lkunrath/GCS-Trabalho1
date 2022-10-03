@@ -1,42 +1,39 @@
 package src.Entidades;
-
 import src.Enums.TipoUsuario;
 import src.Models.Usuario;
 
 public class Administrador extends Usuario {
 
+    private String[] listaPac;
+    private String[] listaMed;
+    private int tamanho;
+    
     public Administrador(String nome, TipoUsuario tipoUsuario) {
         super(nome, tipoUsuario);
+        
+        this.tamanho=0;
     }
-
-public Paciente buscaPaciente(String nome, TipoUsuario tipoUsuario) {
     
-    if(TipoUsuario != Medico) {
-        return null;
-    }
-    else {
-       for(int i=0; i<=ListaPac.size(); i++) {
-        if (nomespac.get(i).getNomePac().equalsIgnoreCase(nome)) {
-            listapac.get(i).getNomePac();
+    public boolean buscaPaciente(String nome) {
+        for (int i=0; i<this.tamanho;i++) {
+            if(this.listaPac[i].equals(nome)) {
+                return true;
+            }
         }
-       }
-       return ListaPac;
+        return false;
     }
 
-}
-
-public Medico buscaPaciente(String nome, TipoUsuario tipoUsuario) {
-    if(TipoUsuario != Medico) {
-        return null;
-    }
-    else {
-       for(int i=0; i<=ListaMed.size(); i++) {
-        if (Listamed.get(i).getNomeMed().equalsIgnoreCase(nome)) {
-            ListaMed.get(i).getNomeMed();
+    public boolean buscaMedico(String nome) {
+        for (int i=0; i<this.tamanho;i++) {
+            if(this.listaMed[i].equals(nome)) {
+                return true;
+            }
         }
-        return ListaMed;
-       }
+        return false;
     }
-}
+    
+    
+
+
 
 }
