@@ -16,15 +16,14 @@ public class GCS {
     
 
     public void executa() {
-        Usuario usuarioAtual = selecionaUsuarioAtual(sc);
+        Usuario usuarioAtual = selecionaUsuarioAtual();
         if(usuarioAtual instanceof Medico){System.out.println("Logado como Medico");} //SOP apenas para ver se funciona, pode trocar por metodo
         if(usuarioAtual instanceof Administrador){System.out.println("Logado como Administrado");} //SOP apenas para ver se funciona, pode trocar por metodo
         if(usuarioAtual instanceof Paciente){System.out.println("Logado como Paciente");} //SOP apenas para ver se funciona, pode trocar por metodo
 
     }
 
-    private Usuario selecionaUsuarioAtual(Scanner sc) {
-        
+    private Usuario selecionaUsuarioAtual() {
         sc = new Scanner(System.in);
         Usuario usuario = null;
         int res = -1;
@@ -62,28 +61,30 @@ public class GCS {
                         System.out.println("----- MENU ----- ");
                         System.out.println("Opção 1: Buscar Paciente");
                         System.out.println("Opção 2: Buscar Médico");
-                        int opcao = sc.nextInt();
-                        switch(opcao) {
-                            
-                            case 1: 
-                            System.out.println("Digite o nome do paciente: ");
-                            String nomeP = sc.nextLine();
-                            if(buscaPaciente(nomeP)){
-                                System.out.println("Este usuário é um paciente");
-                            } else {
-                                System.out.println("Paciente não encontrado");
+
+                        int opcao = Integer.parseInt(sc.nextLine());
+
+                        switch (opcao) {
+                            case 1 -> {
+                                System.out.println("Digite o nome do paciente: ");
+                                String nomeP = sc.nextLine();
+
+                                if (((Administrador) usuario).buscaPaciente(nomeP)) {
+                                    System.out.println("Este usuário é um paciente");
+                                } else {
+                                    System.out.println("Paciente não encontrado");
+                                }
                             }
-                            break;
-                            
-                            case 2: 
-                            System.out.println("Digite o nome do médico: ");
-                            String nomeM = sc.nextLine();
-                            if(buscaMedico(nomeM)){
-                                System.out.println("Este usuário é um médico");
-                            } else {
-                                System.out.println("Médico não encontrado");
+                            case 2 -> {
+                                System.out.println("Digite o nome do médico: ");
+                                String nomeM = sc.nextLine();
+
+                                if ( ((Administrador) usuario).buscaMedico(nomeM) ) {
+                                    System.out.println("Este usuário é um médico");
+                                } else {
+                                    System.out.println("Médico não encontrado");
+                                }
                             }
-                            break; 
                         }
                     }
                     default -> throw new NumberFormatException();
