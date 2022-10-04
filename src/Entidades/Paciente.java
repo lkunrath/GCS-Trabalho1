@@ -11,7 +11,7 @@ public class Paciente extends Usuario {
     }
 
     public void marcarExameRealizado(Date data, Exame exame) {
-        Date examemais30 = exame.getDataRealizada();
+        Date examemais30 = exame.getDataCadastro();
         examemais30.setTime(examemais30.getTime() + 30L * 24 * 60 * 60 * 1000);
         if(exame.getPaciente().getId() != this.getId()){System.out.print("O Exame solicitado não é deste paciente");}
         else if(exame.getDataRealizada().before(exame.getDataCadastro()) ){
