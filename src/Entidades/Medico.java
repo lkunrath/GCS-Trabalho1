@@ -1,7 +1,7 @@
-package src.Entidades;
+package Entidades;
 
-import src.Enums.TipoUsuario;
-import src.Models.Usuario;
+import Enums.TipoUsuario;
+import Models.Usuario;
 
 import java.util.ArrayList;
 
