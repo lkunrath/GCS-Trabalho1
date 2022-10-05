@@ -59,14 +59,18 @@ public class Exame {
         return tipoExame;
     }
 
-    public void setRealizado(boolean realizado){this.realizado = realizado;}
-    public boolean getRealizado(){
+    public void setRealizado(boolean realizado) {
+        this.realizado = realizado;
+    }
+    
+    public boolean getRealizado() {
         return realizado;
-}
+    }
+    
     public void setTipoExame(TipoExame tipoExame) {
         this.tipoExame = tipoExame;
     }
-
+    
     public Date getDataRealizada() {
         return dataRealizada;
     }
