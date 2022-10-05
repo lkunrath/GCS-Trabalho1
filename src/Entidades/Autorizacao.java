@@ -1,9 +1,10 @@
 package Entidades;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
-public class Autorizacao {
+public class Autorizacao implements Comparable<Autorizacao> {
     int id;
     Date data;
     Medico medico;
@@ -12,7 +13,7 @@ public class Autorizacao {
     private ArrayList<Exame> exames;
 
     //lista com todas as autorizacoes para verificar se o codigo identificador é repetido
-    private static ArrayList<Autorizacao> todasAutorizacoes;
+    private static ArrayList<Autorizacao> todasAutorizacoes = new ArrayList<>();
 
 
     //construtor com os atributos pedidos pelo topico 2
@@ -24,7 +25,7 @@ public class Autorizacao {
         this.exame = exame;
     }
 
-    //getters e setters dos atrbutos
+    //getters e setters dos atributos
     public int getId() {
         return id;
     }
@@ -65,13 +66,21 @@ public class Autorizacao {
         this.exame = exame;
     }
 
+    //metodo que devolve um clone de todas autorizações
     public static ArrayList<Autorizacao> getTodasAutorizacoes() {
-        return todasAutorizacoes;
+        return (ArrayList<Autorizacao>) todasAutorizacoes.clone();
     }
 
-    public static void adicionaAutorizacao(Autorizacao autorizacao){
+    //adiociona uma autorização (utilizar o metodo em Paciente para cadastrar, pois ele verifica se o id é repetido. Se não é, chama esse método)
+    public static void adicionaAutorizacao(Autorizacao autorizacao) {
 
         todasAutorizacoes.add(autorizacao);
+    }
+
+    //indica como deve ser ordenanda uma lista de autorizações
+    @Override
+    public int compareTo(Autorizacao autorizacao) {
+        return getData().compareTo(autorizacao.getData());
     }
 
     public boolean adicionaExame(Exame e) {
@@ -84,4 +93,6 @@ public class Autorizacao {
     public ArrayList<Exame> getExames() {
         return new ArrayList<>(exames);
     }
+
+
 }

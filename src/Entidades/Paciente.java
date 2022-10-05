@@ -4,6 +4,7 @@ import Enums.TipoUsuario;
 import Models.Usuario;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Paciente extends Usuario {
 
@@ -13,32 +14,23 @@ public class Paciente extends Usuario {
     }
 
     public boolean cadastraAutorizacao(Autorizacao autorizacao){
-        for(Autorizacao autorizacaoAux:Autorizacao.getTodasAutorizacoes()){
-            if(autorizacaoAux.getId()==autorizacao.getId())return false;
+
+        for (Autorizacao autorizacaoAux : Autorizacao.getTodasAutorizacoes()) {
+            if (autorizacaoAux.getId() == autorizacao.getId()) return false;
         }
 
         Autorizacao.adicionaAutorizacao(autorizacao);
         return autorizacoesPaciente.add(autorizacao);
     }
 
-
-    public ArrayList<Autorizacao> listaAutorizacoesOrdenada(){
-        Autorizacao aux = null;
-        boolean troca = false;
-        do{
-            troca = false;
-            for(int i = 0; i<autorizacoesPaciente.size()-1;i++)
-            {
-                if(autorizacoesPaciente.get(i).getData().after(autorizacoesPaciente.get(i+1).getData()))
-                {
-                    aux = autorizacoesPaciente.get(i);
-                    autorizacoesPaciente.add(i,autorizacoesPaciente.get(i+1));
-                    autorizacoesPaciente.add(i+1,aux);
-                    troca = true;
-                }
-            }
-        }while(troca);
+    public ArrayList<Autorizacao> getAutorizacoesPaciente() {
         return (ArrayList<Autorizacao>)autorizacoesPaciente.clone();
+    }
 
+    //ordena um clone, da data mais antiga ate a mais recente
+    public ArrayList<Autorizacao> ac() {
+        ArrayList<Autorizacao> aux=getAutorizacoesPaciente();
+        Collections.sort(aux);
+        return aux;
     }
 }
