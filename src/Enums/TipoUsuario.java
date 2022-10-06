@@ -1,4 +1,4 @@
-package src.Enums;
+package Enums;
 
 public enum TipoUsuario {
     MEDICO, PACIENTE, ADMINISTRADOR

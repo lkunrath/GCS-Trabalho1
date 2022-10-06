@@ -1,9 +1,7 @@
-package src;
-
-import src.Entidades.*;
-import src.Enums.TipoExame;
-import src.Enums.TipoUsuario;
-import src.Models.Usuario;
+import Entidades.*;
+import Enums.TipoExame;
+import Enums.TipoUsuario;
+import Models.Usuario;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,7 +23,7 @@ public class GCS {
         pacientes = new ArrayList<>();
         administradores = new ArrayList<>();
         date = new Date();
-        autorizacoes = new Autorizacao();
+        //adicionar autorizacao aq
     }
 
     public void executa() {

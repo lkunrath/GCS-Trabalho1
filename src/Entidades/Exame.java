@@ -1,6 +1,6 @@
-package src.Entidades;
+package Entidades;
 
-import src.Enums.TipoExame;
+import Enums.TipoExame;
 
 import java.util.Date;
 
@@ -15,6 +15,8 @@ public class Exame {
     private boolean realizado;
 
     private Date dataRealizada;
+
+    private Autorizacao autorizacao=null;
 
     public Exame(Date dataCadastro, Medico medico, Paciente paciente, TipoExame tipoExame) {
         id = globalId;
@@ -53,6 +55,14 @@ public class Exame {
 
     public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
+    }
+
+    public Autorizacao getAutorizacao() {
+        return autorizacao;
+    }
+
+    public void setAutorizacao(Autorizacao autorizacao){
+        this.autorizacao=autorizacao;
     }
 
     public TipoExame getTipoExame() {
