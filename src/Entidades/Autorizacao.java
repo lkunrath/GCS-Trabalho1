@@ -11,6 +11,7 @@ public class Autorizacao implements Comparable<Autorizacao> {
     Paciente paciente;
     Exame exame;
     private ArrayList<Exame> exames;
+    private List<Paciente> filtroNome;
 
     //lista com todas as autorizacoes para verificar se o codigo identificador é repetido
     private static ArrayList<Autorizacao> todasAutorizacoes = new ArrayList<>();
@@ -93,6 +94,13 @@ public class Autorizacao implements Comparable<Autorizacao> {
     public ArrayList<Exame> getExames() {
         return new ArrayList<>(exames);
     }
-
-
+   
+    public Paciente filtroPaciente(Paciente paciente){
+        for (int i = 0; i < exames.size(); i++) {
+            filtroNome = new ArrayList<>();
+            filtroNome.add(exames.get(i).getPaciente());
+        }
+        System.out.println(filtroNome.toString()); 
+        return paciente;
+    }
 }

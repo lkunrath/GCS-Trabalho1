@@ -48,6 +48,30 @@ public class GCS {
         pacientes.add( p3 );
         pacientes.add( p4 );
         pacientes.add( p5 );
+
+        Medico m1 = new Medico("Rodrigo", TipoUsuario.MEDICO);
+        Medico m2 = new Medico("Gustavo", TipoUsuario.MEDICO);
+        Medico m3 = new Medico("Joana", TipoUsuario.MEDICO);
+        Medico m4 = new Medico("Leonardo", TipoUsuario.MEDICO);
+        Medico m5 = new Medico("Maria", TipoUsuario.MEDICO);
+
+        medicos.add(m1);
+        medicos.add(m2);
+        medicos.add(m3);
+        medicos.add(m4);
+        medicos.add(m5);
+
+        Exame ex1 = new Exame(date, m1 , p1, TipoExame.RADIOGRAFIA);
+        Exame ex2 = new Exame(date, m5 , p5, TipoExame.CREATINA);
+        Exame ex3 = new Exame(date, m2 , p2, TipoExame.HEMOGRAMA);
+        Exame ex4 = new Exame(date, m3 , p2, TipoExame.GLICEMIA);
+        Exame ex5 = new Exame(date, m1 , p1, TipoExame.ECOCARDIOGRAMA);
+
+        autorizacoes.adicionaExame(ex1);
+        autorizacoes.adicionaExame(ex2);
+        autorizacoes.adicionaExame(ex3);
+        autorizacoes.adicionaExame(ex4);
+        autorizacoes.adicionaExame(ex5);
     }
     private Usuario selecionaUsuarioAtual( ) {
         sc = new Scanner( System.in );
@@ -57,19 +81,18 @@ public class GCS {
 
         while ( res == -1 ) {
             System.out.println("""
-                    Selecione o tipo de usuario:
+                    Selecione o tipo de usuário:
                     
-                    [1]: Medico
+                    [1]: Médico
                     [2]: Paciente
                     [3]: Administrador
-                    
                     """);
             try {
                 res = Integer.parseInt( sc.nextLine( ) );
 
                 switch ( res ) {
                     case 1 -> {
-                        System.out.print( "Nome do medico: " );
+                        System.out.print( "\nNome do médico: " );
                         nome = sc.nextLine( );
                         usuario = new Medico( nome, TipoUsuario.MEDICO );
                         medicos.add( (Medico) usuario);
@@ -89,7 +112,7 @@ public class GCS {
                     default -> throw new NumberFormatException( );
                 }
             } catch ( NumberFormatException e ) {
-                System.out.println( "\nValor invalido\n" );
+                System.out.println( "\nValor inválido\n" );
                 res = -1;
             }
         }
@@ -108,13 +131,13 @@ public class GCS {
                 System.out.println("""
                     
                     ------------------
-                    LOGADO COMO MEDICO
+                    LOGADO COMO MÉDICO
                     ------------------
                     
-                    Selecione uma opcao:
+                    Selecione uma opção:
                     
-                    [1] Adicionar nova autorizacao
-                    
+                    [1] Adicionar nova autorização
+                    [2] Listar autorizações 
                     """);
 
                 try {
@@ -129,7 +152,7 @@ public class GCS {
                             System.out.println("""
                                     
                                     --------------------------
-                                    ADICIONAR NOVA AUTORIZACAO
+                                    ADICIONAR NOVA AUTORIZAÇÃO
                                     --------------------------
                                     
                                     Pacientes cadastrados:
@@ -154,7 +177,6 @@ public class GCS {
 
                             // Verifica se o ID está correto
                             if ( p == null ) throw new NumberFormatException( );
-
 
                             // Imprime todos ID e nome de todos os tipos de exames disponíveis
                             System.out.print(" \nSelecione o tipo de exame: \n" );
@@ -181,29 +203,65 @@ public class GCS {
                             System.out.printf("""
                                     
                                     ----------------------------------
-                                    AUTORIZACAO ADICIONADA COM SUCESSO
+                                    AUTORIZAÇÃO ADICIONADA COM SUCESSO
                                     ----------------------------------
                                     
                                     Data: %s
-                                    Nome do medico: %s
+                                    Nome do médico: %s
                                     Nome do paciente: %s
                                     Exame autorizado: %s
                                     
                                     """, simpleDateFormat.format(date), u.getNome(), p.getNome(), tipoExame.name());
 
                             break;
-//                        case 2: {
-//                            break;
-//                        }
+
+                         case 2: // lista as autorizações
+                            Paciente pacienteTeste = null;
+                            System.out.println("""
+                                        
+                                --------------------------
+                                   LISTAR AUTORIZAÇÕES
+                                --------------------------
+                                
+                                Filtros:
+
+                                [1] Por paciente
+                                [2] Por exame
+                                """);
+                             
+                             int op = sc.nextInt();
+                             switch (op){
+                                case 1:
+                                // Imprime o ID e nome de todos os pacientes cadastrados
+                                for ( Paciente paciente : pacientes ) {
+                                    System.out.printf( "[%d] %s\n", paciente.getId( ), paciente.getNome( ) );
+                                }
+
+                                // Recebe o id
+                                System.out.print(" \nSelecione o paciente: " );
+                                int numPaciente = Integer.parseInt( sc.nextLine( ));
+                                
+                                case 2 :
+                                TipoExame tpExame = null;
+                                // Imprime todos ID e nome de todos os tipos de exames disponíveis
+                                System.out.print(" \nSelecione o tipo de exame: \n");
+                                
+                                for (TipoExame t : TipoExame.values( )) {
+                                    System.out.printf("[%d] %s\n", t.getId( ), t.name( ));
+                                }
+                        
+                            break;
+                         
                         default:
-                            System.out.println("\nValor invalido");
+                            System.out.println("\nValor inválido");
                             res = -1;
+                        }
                     }
 
-
                 } catch ( NumberFormatException e ) {
-                    System.out.println( "\nValor invalido\n" );
+                    System.out.println( "\nValor inválido\n" );
                     res = -1;
+                
                 }
             }
         }

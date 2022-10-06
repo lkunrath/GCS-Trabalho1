@@ -12,6 +12,9 @@ public class Exame {
     private Medico medico;
     private Paciente paciente;
     private TipoExame tipoExame;
+    private boolean realizado;
+
+    private Date dataRealizada;
 
     private Autorizacao autorizacao=null;
 
@@ -22,6 +25,8 @@ public class Exame {
         this.medico = medico;
         this.paciente = paciente;
         this.tipoExame = tipoExame;
+        realizado = false;
+        dataRealizada = null;
     }
 
     public int getId() {
@@ -64,7 +69,29 @@ public class Exame {
         return tipoExame;
     }
 
+    public void setRealizado(boolean realizado) {
+        this.realizado = realizado;
+    }
+    
+    public boolean getRealizado() {
+        return realizado;
+    }
+    
     public void setTipoExame(TipoExame tipoExame) {
         this.tipoExame = tipoExame;
+    }
+    
+    public Date getDataRealizada() {
+        return dataRealizada;
+    }
+
+    public void setDataRealizada(Date dataRealizada) {
+        this.dataRealizada = dataRealizada;
+    }
+
+    public boolean isRealizado(){
+        if(realizado){System.out.println("O exame foi realizado com sucesso!"); return true;}
+        System.out.println("O exame não foi realizado");
+        return false;
     }
 }
