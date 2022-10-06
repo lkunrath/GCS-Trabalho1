@@ -11,7 +11,7 @@ public class Autorizacao implements Comparable<Autorizacao> {
     Paciente paciente;
     Exame exame;
     private ArrayList<Exame> exames;
-    private List<Paciente> filtroNome;
+    private ArrayList<Paciente> filtroNome;
 
     //lista com todas as autorizacoes para verificar se o codigo identificador é repetido
     private static ArrayList<Autorizacao> todasAutorizacoes = new ArrayList<>();

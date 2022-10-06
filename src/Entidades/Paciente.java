@@ -35,7 +35,7 @@ public class Paciente extends Usuario {
         Collections.sort(aux);
         return aux;
     }
-}
+
     public void marcarExameRealizado(Date data, Exame exame) {
         Date exameMais30 = exame.getDataCadastro();
 
@@ -53,3 +53,5 @@ public class Paciente extends Usuario {
         else{exame.setRealizado(true); exame.setDataRealizada(data);}
     }
 }
+    
+
