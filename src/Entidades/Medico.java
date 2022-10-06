@@ -1,4 +1,4 @@
-package Entidades;
+package src.Entidades;
 
 import Enums.TipoUsuario;
 import Models.Usuario;

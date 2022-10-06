@@ -1,20 +1,21 @@
-package Entidades;
+package src.Entidades;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 public class Autorizacao implements Comparable<Autorizacao> {
-    int id;
-    Date data;
-    Medico medico;
-    Paciente paciente;
-    Exame exame;
-    private ArrayList<Exame> exames;
+    private int id;
+    private Date data;
+    private Medico medico;
+    private Paciente paciente;
+    private Exame exame;
+    private ArrayList<Exame> exames = new ArrayList<>();
     private List<Paciente> filtroNome;
 
     //lista com todas as autorizacoes para verificar se o codigo identificador é repetido
-    private static ArrayList<Autorizacao> todasAutorizacoes = new ArrayList<>();
+    private ArrayList<Autorizacao> todasAutorizacoes = new ArrayList<>();
 
 
     //construtor com os atributos pedidos pelo topico 2
@@ -24,6 +25,9 @@ public class Autorizacao implements Comparable<Autorizacao> {
         this.medico = medico;
         this.paciente = paciente;
         this.exame = exame;
+    }
+
+    public Autorizacao() {
     }
 
     //getters e setters dos atributos
@@ -68,13 +72,12 @@ public class Autorizacao implements Comparable<Autorizacao> {
     }
 
     //metodo que devolve um clone de todas autorizações
-    public static ArrayList<Autorizacao> getTodasAutorizacoes() {
+    public ArrayList<Autorizacao> getTodasAutorizacoes() {
         return (ArrayList<Autorizacao>) todasAutorizacoes.clone();
     }
 
     //adiociona uma autorização (utilizar o metodo em Paciente para cadastrar, pois ele verifica se o id é repetido. Se não é, chama esse método)
-    public static void adicionaAutorizacao(Autorizacao autorizacao) {
-
+    public void adicionaAutorizacao(Autorizacao autorizacao) {
         todasAutorizacoes.add(autorizacao);
     }
 
@@ -92,13 +95,13 @@ public class Autorizacao implements Comparable<Autorizacao> {
     }
 
     public ArrayList<Exame> getExames() {
-        return new ArrayList<>(exames);
+        return (ArrayList<Exame>) exames.clone();
     }
    
     public Paciente filtroPaciente(Paciente paciente){
-        for (int i = 0; i < exames.size(); i++) {
+        for (Exame value : exames) {
             filtroNome = new ArrayList<>();
-            filtroNome.add(exames.get(i).getPaciente());
+            filtroNome.add(value.getPaciente());
         }
         System.out.println(filtroNome.toString()); 
         return paciente;
