@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Autorizacao implements Comparable<Autorizacao> {
+ bug-fix
     private int id;
     private Date data;
     private Medico medico;
@@ -12,6 +13,15 @@ public class Autorizacao implements Comparable<Autorizacao> {
     private Exame exame;
     private ArrayList<Exame> exames = new ArrayList<>();
     private List<Paciente> filtroNome;
+
+    int id;
+    Date data;
+    Medico medico;
+    Paciente paciente;
+    Exame exame;
+    private ArrayList<Exame> exames;
+    private ArrayList<Paciente> filtroNome;
+ main
 
     //lista com todas as autorizacoes para verificar se o codigo identificador é repetido
     private ArrayList<Autorizacao> todasAutorizacoes = new ArrayList<>();

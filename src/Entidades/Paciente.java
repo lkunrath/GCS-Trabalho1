@@ -55,3 +55,5 @@ public class Paciente extends Usuario {
         else{exame.setRealizado(true); exame.setDataRealizada(data);}
     }
 }
+    
+
