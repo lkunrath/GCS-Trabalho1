@@ -408,7 +408,7 @@ public class GCS {
                                             
                         Selecione uma opção:
                                             
-                        [1] Marcar Exame Realizada
+                        [1] Marcar Exame como Realizado
                         [2] Listar Autorizações
                         [3] Consultar Exames para realizar
                         [4] Voltar ao Menu Inicial
@@ -661,7 +661,7 @@ public class GCS {
                 switch (res) {
                     case 1 -> {
                         System.out.println("Digite o nome do novo Usuário: ");
-                        String nome = sc.next();
+                        String nome = sc.nextLine();
 
                         System.out.println("Insira o numero equivalente ao tipo de Usuário: \n [1] Médico \n [2] Paciente \n [3] Administrador ");
                         int escolha = sc.nextInt();
