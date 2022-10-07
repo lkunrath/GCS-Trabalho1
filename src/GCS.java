@@ -302,6 +302,7 @@ public class GCS {
             }}
     }
 
+
     private void menuAdmnistrador(){
             int res = -1;
             while (res == -1) {
@@ -353,8 +354,9 @@ public class GCS {
                             String nom = sc.next();
                             for ( Paciente paciente : pacientes ) {
                                 if (paciente.getNome().equalsIgnoreCase(nom))
-                                    System.out.printf( "[%d] %s\n", paciente.getNome( ),"Autorização"  );
+                                    System.out.println( "Paciente: "+paciente.getNome( )+"Autorizações:"+autorizacoes.getExame());
                             }
+
                             sc.nextLine(); res = -1 ;break;
 
                         case 3:
