@@ -44,6 +44,11 @@ public class GCS {
     }
 
     public void preCadastro( ) {
+
+        Administrador Adm = new Administrador("Administrador", TipoUsuario.ADMINISTRADOR);
+
+        administradores.add(Adm);
+
         Paciente p1 = new Paciente( "Joao", TipoUsuario.PACIENTE );
         Paciente p2 = new Paciente( "Lara", TipoUsuario.PACIENTE );
         Paciente p3 = new Paciente( "Luiz", TipoUsuario.PACIENTE );
@@ -412,11 +417,11 @@ public class GCS {
 
                             System.out.println("""
 
-                                --------------------------
-                        ADICIONAR NOVA AUTORIZAÇÃO
-                                --------------------------
+                 --------------------------
+                 ADICIONAR NOVA AUTORIZAÇÃO
+                 --------------------------
 
-                        Pacientes cadastrados:
+                 Pacientes cadastrados:
                 """);
 
         // Imprime o ID e nome de todos os pacientes cadastrados
@@ -467,7 +472,7 @@ public class GCS {
                 AUTORIZAÇÃO ADICIONADA COM SUCESSO
                 ----------------------------------
 
-                        Data: %s
+                Data: %s
                 Nome do médico: %s
                 Nome do paciente: %s
                 Exame autorizado: %s
