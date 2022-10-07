@@ -1,6 +1,6 @@
 package Entidades;
 
-import src.Enums.TipoExame;
+import Enums.TipoExame;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

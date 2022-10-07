@@ -1,7 +1,7 @@
 
-import src.Entidades.*;
-import src.Enums.*;
-import src.Models.Usuario;
+import Entidades.*;
+import Enums.*;
+import Models.Usuario;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -323,7 +323,43 @@ public class GCS {
             }
         }
     }
-    
+    private void imprimeAutorizacoesNaoRealizadasPorPaciente(Paciente p) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        // Verifica se o ID está correto
+        if (p == null) throw new NumberFormatException();
+
+        ArrayList<Exame> examesFiltrados = new ArrayList<>(autorizacoes.filtroPaciente(p));
+        examesFiltrados.removeIf(x -> x.isRealizado());
+        if (examesFiltrados.isEmpty()) {
+            System.out.println("""
+                    
+                                    ==============================
+                                    NENHUMA AUTORIZACAO ENCONTRADA
+                                    ==============================
+                                    
+                                    """);
+        } else {
+            System.out.printf("""
+                                        
+                    =================================
+                    %d AUTORIZACAO(OES) ENCONTRADA(S)
+                    =================================
+                    """, examesFiltrados.size());
+
+            for (Exame e : examesFiltrados) {
+                System.out.println("\n----------------------");
+                System.out.println("Código: " + e.getId());
+                System.out.println("Módico: " + e.getMedico().getNome());
+                System.out.println("Paciente: " + e.getPaciente().getNome());
+                System.out.println("Tipo de exame: " + e.getTipoExame());
+                System.out.println("Já realizado: " + (e.getRealizado() ? "Sim" : "Nao"));
+                System.out.println("Data do cadastro: " + simpleDateFormat.format(e.getDataCadastro()));
+                System.out.println("Data da realização: " + (e.getDataRealizada() == null ? "-" : simpleDateFormat.format(e.getDataRealizada())));
+            }
+        }
+    }
+
     private void imprimeAutorizacoesPorPaciente(Paciente p) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -359,7 +395,6 @@ public class GCS {
                 System.out.println("Data da realização: " + (e.getDataRealizada() == null ? "-" : simpleDateFormat.format(e.getDataRealizada())));
             }
         }
-        return examesPaciente;
     }
     private void imprimeAutorizacoesPorTipo() {
         TipoExame tpEx = null;
