@@ -3,6 +3,7 @@ package Entidades;
 import Enums.TipoUsuario;
 import Models.Usuario;
 
+
 import java.util.ArrayList;
 
 public class Medico extends Usuario {

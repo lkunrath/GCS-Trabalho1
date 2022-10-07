@@ -1,8 +1,8 @@
 package Entidades;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import src.Enums.TipoExame;
+
+import java.util.*;
 
 public class Autorizacao implements Comparable<Autorizacao> {
 
@@ -12,12 +12,9 @@ public class Autorizacao implements Comparable<Autorizacao> {
     private Paciente paciente;
     private Exame exame;
     private ArrayList<Exame> exames = new ArrayList<>();
-    private List<Paciente> filtroNome;
-
 
     //lista com todas as autorizacoes para verificar se o codigo identificador é repetido
     private ArrayList<Autorizacao> todasAutorizacoes = new ArrayList<>();
-
 
     //construtor com os atributos pedidos pelo topico 2
     public Autorizacao(int id, Date data, Medico medico, Paciente paciente, Exame exame) {
@@ -89,22 +86,43 @@ public class Autorizacao implements Comparable<Autorizacao> {
     }
 
     public boolean adicionaExame(Exame e) {
-        for (Exame exame : exames) {
-            if (exame.getTipoExame().equals(e.getTipoExame())) return false;
-        }
         return exames.add(e);
     }
 
     public ArrayList<Exame> getExames() {
         return (ArrayList<Exame>) exames.clone();
     }
-   
-    public Paciente filtroPaciente(Paciente paciente){
+
+    public ArrayList<Exame> filtroPaciente(Paciente p) {
+        ArrayList<Exame> filtroNome = new ArrayList<>();
         for (Exame value : exames) {
-            filtroNome = new ArrayList<>();
-            filtroNome.add(value.getPaciente());
+            if (value.getPaciente().equals(paciente))
+                filtroNome.add(value);
         }
-        System.out.println(filtroNome.toString()); 
-        return paciente;
+        Collections.sort(filtroNome, new SortByDate());
+        return filtroNome;
     }
+
+
+    public ArrayList<Exame> filtroExames(TipoExame tipoExame) {
+        ArrayList<Exame> filtroExame = new ArrayList<>();
+        for (Exame value : exames) {
+            if (value.getTipoExame().equals(tipoExame))
+                filtroExame.add(value);
+        }
+        Collections.sort(filtroExame, new SortByDate());
+
+        return filtroExame;
+    }
+
+    public class SortByDate implements Comparator<Exame> {
+        @Override
+        public int compare(Exame a, Exame b) {
+            return a.getDataRealizada().compareTo(b.getDataRealizada());
+        }
+    }
+
+
 }
+
+
