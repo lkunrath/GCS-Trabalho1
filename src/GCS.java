@@ -1,10 +1,10 @@
-package src;
+
 
 import Enums.TipoExame;
 import Enums.TipoUsuario;
 
-import src.Entidades.*;
-import src.Models.Usuario;
+import Entidades.*;
+import Models.Usuario;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,7 +12,9 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class GCS {
-
+    public static void main(String args[]) {
+        
+    }
     public String[] listaPac;
     public String[] listaMed;
     Scanner sc;
@@ -86,6 +88,8 @@ public class GCS {
         Usuario usuario = null;
         int res = -1;
         int numId;
+
+        
 
         while ( res == -1 ) {
             System.out.println("\n");
@@ -322,7 +326,9 @@ public class GCS {
                         [1] Adicionar novo usuário
                         [2] Procurar autorizações por nome de Usuario
                         [3] Estatisticas Gerais
-                        [4] Voltar ao Menu Inicial
+                        [4] Busca Paciente
+                        [5] Busca Medico
+                        [6] Voltar ao Menu Inicial
                         """);
                 try {
                     res = Integer.parseInt(sc.nextLine());
@@ -370,8 +376,32 @@ public class GCS {
                             int ad = administradores.size();
                             System.out.println("Número de Pacientes: "+ pa+ "\nNúmero de Médicos: "+ me + "\nNúmero de Administradores: "+ad);
                             res = -1 ;break;
+                        
+                        case 4: 
+                            System.out.println("Informe o nome do paciente que deseja buscar");
+                            String nomePac = sc.nextLine();
+                            buscaPaciente(nomePac);
+                            if(buscaPaciente(nomePac)){
+                                System.out.print("Paciente  encontrado");
+                            } else {
+                                System.out.print("Paciente não foi encontrado"); 
+                            }
+                            break;
+                        
+                        case 5:
+                            System.out.println("Informe o nome do medico que deseja buscar");
+                            String nomeMed = sc.nextLine();
+                            buscaMedico(nomeMed);
+                        if(buscaMedico(nomeMed)){
+                            System.out.print("Medico  encontrado");
+                        } else {
+                            System.out.print("Medico não foi encontrado"); 
+                        }
+                        break;
 
-                        case 4: executa();
+
+                        
+                        case 6: executa();
 
 
 
@@ -541,4 +571,23 @@ public class GCS {
             }
         }
      }
+
+     private boolean buscaPaciente(String nome) {
+       
+            if(pacientes.equals(nome)) {
+                return true;
+            }
+   
+        return false;
+    }
+
+    private boolean buscaMedico(String nome) {
+        
+            if(medicos.equals(nome)) {
+                return true;
+            }
+        
+        return false;
+    }
+     
 }

@@ -1,4 +1,4 @@
-package src.Entidades;
+package Entidades;
 
 import Enums.TipoExame;
 
