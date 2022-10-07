@@ -1,8 +1,8 @@
-package src;
 
 import src.Entidades.*;
 import src.Enums.*;
 import src.Models.Usuario;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,11 +65,26 @@ public class GCS {
         medicos.add(m4);
         medicos.add(m5);
 
-        Exame ex1 = new Exame(date, m1 , p1, TipoExame.RADIOGRAFIA);
-        Exame ex2 = new Exame(date, m5 , p5, TipoExame.HEMOGRAMA);
-        Exame ex3 = new Exame(date, m2 , p2, TipoExame.HEMOGRAMA);
-        Exame ex4 = new Exame(date, m3 , p2, TipoExame.GLICEMIA);
-        Exame ex5 = new Exame(date, m1 , p1, TipoExame.ECOCARDIOGRAMA);
+        c.setTime(date);
+        c.add(Calendar.DATE, -12);
+        Exame ex1 = new Exame(c.getTime(), m1 , p1, TipoExame.RADIOGRAFIA);
+
+        c.setTime(date);
+        c.add(Calendar.DATE, -32);
+        Exame ex2 = new Exame(c.getTime(), m5 , p5, TipoExame.HEMOGRAMA);
+
+        c.setTime(date);
+        c.add(Calendar.DATE, 0);
+        Exame ex3 = new Exame(c.getTime(), m2 , p2, TipoExame.HEMOGRAMA);
+
+
+        c.setTime(date);
+        c.add(Calendar.DATE, -5);
+        Exame ex4 = new Exame(c.getTime(), m3 , p2, TipoExame.GLICEMIA);
+
+        c.setTime(date);
+        c.add(Calendar.DATE, -1);
+        Exame ex5 = new Exame(c.getTime(), m1 , p1, TipoExame.ECOCARDIOGRAMA);
 
         autorizacoes.adicionaExame(ex1);
         autorizacoes.adicionaExame(ex2);
@@ -179,7 +194,6 @@ public class GCS {
         }
         return true;
     }
-
     private boolean exibirPacientesDisponiveis() {
         if (pacientes.isEmpty()) {
             System.out.println("""
@@ -275,6 +289,7 @@ public class GCS {
         // Atribui esse id a uma referência de paciente
         p = getPacientePorId(id);
 
+
         // Verifica se o ID está correto
         if (p == null) throw new NumberFormatException();
 
@@ -308,6 +323,7 @@ public class GCS {
             }
         }
     }
+    
     private void imprimeAutorizacoesPorPaciente(Paciente p) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -343,6 +359,7 @@ public class GCS {
                 System.out.println("Data da realização: " + (e.getDataRealizada() == null ? "-" : simpleDateFormat.format(e.getDataRealizada())));
             }
         }
+        return examesPaciente;
     }
     private void imprimeAutorizacoesPorTipo() {
         TipoExame tpEx = null;
@@ -395,6 +412,41 @@ public class GCS {
             }
         }
     }
+    
+    private void autorizarExame(Paciente p) {
+        ArrayList<Exame> examesPaciente = (ArrayList<Exame>) autorizacoes.filtroPaciente(p);
+        if (examesPaciente.isEmpty()) {
+            System.out.println("""
+            -----------------------
+            NENHUM EXAME AUTORIZADO
+            -----------------------
+            """);
+            } else {
+                System.out.printf("""
+            -------------------------
+            %d EXAME(S) AUTORIZADO(S)
+            -------------------------
+            
+            """, examesPaciente.size());
+
+            imprimeAutorizacoesPorIdPaciente(p.getId());
+            System.out.print("\nSelecione o codigo do exame para confirmar: ");
+
+            int idEx = Integer.parseInt(sc.nextLine());
+
+            Exame exame = getExamePorId(idEx);
+            if (!examesPaciente.contains(exame) || exame == null) {
+                System.out.println("\nEXAME NAO EXISTE");
+                return;
+            }
+            if (exame.isRealizado()) {
+                System.out.println("\nEXAME JA REALIZADO");
+                return;
+            }
+
+            p.marcarExameRealizado(date, exame);
+        }
+    }
 
 
     private void menuPaciente(Usuario u){
@@ -403,7 +455,9 @@ public class GCS {
             System.out.printf("""
                                             
                         --------------------
-                        OLA, PACIENTE %s
+                        
+                        Olá, Paciente %s
+
                         --------------------
                                             
                         Selecione uma opção:
@@ -419,43 +473,7 @@ public class GCS {
 
                 switch (res) {
                     case 1 -> {
-
-                        ArrayList<Exame> examesPaciente = (ArrayList<Exame>) autorizacoes.filtroPaciente((Paciente) u);
-                        if (examesPaciente.isEmpty()) {
-                            System.out.println("""
-                            -----------------------
-                            NENHUM EXAME AUTORIZADO
-                            -----------------------
-                            """);
-                            } else {
-                                System.out.printf("""
-                            -------------------------
-                            %d EXAME(S) AUTORIZADO(S)
-                            -------------------------
-                            
-                            """, examesPaciente.size());
-
-                            imprimeAutorizacoesPorIdPaciente(u.getId());
-                            System.out.print("\nSelecione o codigo do exame para confirmar: ");
-
-                            int idEx = Integer.parseInt(sc.nextLine());
-
-                            Exame exame = getExamePorId(idEx);
-                            if (exame == null) throw new NumberFormatException();
-                            if (exame.isRealizado()) {
-                                System.out.println("\nEXAME JA REALIZADO");
-                                break;
-                            }
-
-                            System.out.println("""
-                            
-                            -------------------------
-                            EXAME MARCADO COM SUCESSO
-                            -------------------------
-                            """);
-                            exame.setRealizado(true);
-                        }
-
+                        autorizarExame((Paciente) u);
                         res = -1;
                     }
                     case 2 -> {
@@ -463,36 +481,8 @@ public class GCS {
                         res = -1;
                     }
                     case 3 -> {
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                        ArrayList<Exame> examesPaciente = (ArrayList<Exame>) autorizacoes.filtroPaciente((Paciente) u);
-                        examesPaciente.removeIf(Exame::isRealizado);
-
-                        if (examesPaciente.isEmpty()) {
-                            System.out.println("""
-                            -----------------------
-                            NENHUM EXAME AUTORIZADO
-                            -----------------------
-                            """);
-                        } else {
-                            System.out.printf("""
-                            -------------------------
-                            %d EXAME(S) AUTORIZADO(S)
-                            -------------------------
-                                                                
-                            """, examesPaciente.size());
-                            res = -1;
-
-                            for (Exame e : examesPaciente) {
-                                System.out.println("\n----------------------");
-                                System.out.println("Codigo: " + e.getId());
-                                System.out.println("Medico: " + e.getMedico().getNome());
-                                System.out.println("Paciente: " + e.getPaciente().getNome());
-                                System.out.println("Tipo de Exame: " + e.getTipoExame());
-                                System.out.println("Ja realizado: " + (e.getRealizado() ? "Sim" : "Nao"));
-                                System.out.println("Data Cadastro: " + simpleDateFormat.format(e.getDataCadastro()));
-                                System.out.println("Data Realizada: " + (e.getDataRealizada() == null ? "-" : simpleDateFormat.format(e.getDataRealizada())));
-                            }
-                        }
+                        imprimeAutorizacoesNaoRealizadasPorPaciente((Paciente) u);
+                        res = -1;
                     }
                     case 4 -> executa();
                     default -> throw new NumberFormatException();

@@ -108,7 +108,7 @@ public class Autorizacao implements Comparable<Autorizacao> {
     public class SortByDate implements Comparator<Exame> {
         @Override
         public int compare(Exame a, Exame b) {
-            if (a.getDataRealizada() != null && a.getDataRealizada() != null) {
+            if (a.getDataRealizada() != null) {
                 return a.getDataRealizada().compareTo(b.getDataRealizada());
             } else {
                 return 0;
