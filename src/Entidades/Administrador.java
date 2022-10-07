@@ -1,5 +1,6 @@
+
 package src.Entidades;
-import src.Enums.TipoUsuario;
+import Enums.TipoUsuario;
 import src.Models.Usuario;
 
 public class Administrador extends Usuario {

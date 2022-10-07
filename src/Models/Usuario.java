@@ -1,18 +1,19 @@
 package src.Models;
 
-import src.Enums.TipoUsuario;
+import Enums.TipoUsuario;
 
 public abstract class Usuario {
 
-    private static int id = 0;
+    private static int globalId = 0;
+    private final int id;
     private String nome;
     private TipoUsuario tipoUsuario;
 
     public Usuario(String nome, TipoUsuario tipoUsuario) {
-        id++;
+        id = globalId;
+        ++globalId;
         this.nome = nome;
         this.tipoUsuario = tipoUsuario;
-        System.out.println(id);
     }
 
     public int getId() {
