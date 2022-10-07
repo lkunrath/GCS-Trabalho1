@@ -17,7 +17,6 @@ public class GCS {
     ArrayList<Paciente> pacientes;
     ArrayList<Administrador> administradores;
     Date date;
-
     Autorizacao autorizacoes;
 
     public GCS() {
@@ -64,7 +63,7 @@ public class GCS {
         medicos.add(m5);
 
         Exame ex1 = new Exame(date, m1 , p1, TipoExame.RADIOGRAFIA);
-        Exame ex2 = new Exame(date, m5 , p5, TipoExame.CREATINA);
+        Exame ex2 = new Exame(date, m5 , p5, TipoExame.HEMOGRAMA);
         Exame ex3 = new Exame(date, m2 , p2, TipoExame.HEMOGRAMA);
         Exame ex4 = new Exame(date, m3 , p2, TipoExame.GLICEMIA);
         Exame ex5 = new Exame(date, m1 , p1, TipoExame.ECOCARDIOGRAMA);
@@ -218,7 +217,7 @@ public class GCS {
                             break;
 
                          case 2: // lista as autorizações
-                            Paciente pacienteTeste = null;
+                            Paciente pacienteTestep = null;
                             System.out.println("""
                                         
                                 --------------------------
@@ -231,28 +230,80 @@ public class GCS {
                                 [2] Por exame
                                 """);
                              
-                             int op = sc.nextInt();
-                             switch (op){
+                            int op = Integer.parseInt(sc.nextLine());
+                            Paciente pac = null;
+                            TipoExame tpEx = null;
+
+                            switch (op){
                                 case 1:
                                 // Imprime o ID e nome de todos os pacientes cadastrados
-                                for ( Paciente paciente : pacientes ) {
-                                    System.out.printf( "[%d] %s\n", paciente.getId( ), paciente.getNome( ) );
+                                for (Paciente paciente : pacientes) {
+                                    System.out.printf("[%d] %s\n", paciente.getId( ), paciente.getNome( ));
                                 }
 
                                 // Recebe o id
-                                System.out.print(" \nSelecione o paciente: " );
-                                int numPaciente = Integer.parseInt( sc.nextLine( ));
+                                System.out.print(" \nSelecione o paciente: ");
+                                int numPaciente = Integer.parseInt(sc.nextLine( ));
+
+                                // Atribui esse id a uma referência de paciente
+                                for (Paciente pct : pacientes) {
+                                     if (pct.getId( ) == numPaciente) {
+                                        p = pct;
+                                        break;
+                                    }
+                                }
+                                
+                                // Verifica se o ID está correto
+                                if (pac == null ) throw new NumberFormatException( );
+
+
+                                //pesquisaAutorizacao.filtroPaciente(pac);
+                                
+                                
+                                System.out.println("\nEsses são os exames do paciente " + pac.getNome() +":");
                                 
                                 case 2 :
-                                TipoExame tpExame = null;
-                                // Imprime todos ID e nome de todos os tipos de exames disponíveis
-                                System.out.print(" \nSelecione o tipo de exame: \n");
-                                
-                                for (TipoExame t : TipoExame.values( )) {
-                                    System.out.printf("[%d] %s\n", t.getId( ), t.name( ));
-                                }
-                        
-                            break;
+                                    // Imprime todos ID e nome de todos os tipos de exames disponíveis
+                                    System.out.print(" \nSelecione o tipo de exame: \n");
+                                    
+                                    for (TipoExame t : TipoExame.values( )) {
+                                        System.out.printf("[%d] %s\n", t.getId( ), t.name( ));
+                                    }
+
+                                    int inputExame = Integer.parseInt(sc.nextLine( ));
+
+                                    for (TipoExame e : TipoExame.values()) {
+                                        if (e.getId() == inputExame) tpEx = e;
+                                    }
+
+                                    if (tpEx == null) throw new NumberFormatException();
+
+                                    ArrayList<Exame> examesFiltrados = autorizacoes.filtroExames(tpEx);
+
+                                    System.out.println(tpEx);
+
+                                    for (Exame e : examesFiltrados) {
+                                        System.out.println("----------------------");
+                                        System.out.println("Médico: " + e.getMedico().getNome());
+                                        System.out.println("Paciente: " + e.getPaciente().getNome());
+                                        System.out.println("Já realizado: " + (e.getRealizado() == true ? "Sim" : "Não"));
+                                        System.out.println("Data Cadastro: " + e.getDataCadastro());
+                                        System.out.println("Data Realizada: " +( e.getDataRealizada() == null ? "-" : e.getDataRealizada()) );
+                                        System.out.println("----------------------");
+                                    }
+
+                                    // for (Exame ex : autorizacoes.getExames()) {
+                                    //     if (ex.getTipoExame() == tpEx) {
+                                    //         System.out.println("----------------------");
+                                    //         System.out.println("Médico: " + ex.getMedico().getNome());
+                                    //         System.out.println("Paciente: " + ex.getPaciente().getNome());
+                                    //         System.out.println("Já realizado: " + (ex.getRealizado() == true ? "Sim" : "Não"));
+                                    //         System.out.println("Data Cadastro: " + ex.getDataCadastro());
+                                    //         System.out.println("Data Realizada: " +( ex.getDataRealizada() == null ? "-" : ex.getDataRealizada()) );
+                                    //         System.out.println("----------------------");
+                                    //     }
+                                    // }
+                                    break;
                          
                         default:
                             System.out.println("\nValor inválido");
