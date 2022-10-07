@@ -38,7 +38,7 @@ bug-fix
 
 
 
-        if(usuarioAtual instanceof Paciente){System.out.println("Logado como Paciente");} //SOP apenas para ver se funciona, pode trocar por metodo
+
 
  main
     }
@@ -259,6 +259,44 @@ bug-fix
     private void adicionarNovaAutorizacao(Usuario u) {
 
 
+    private void menuPaciente(){
+        int res = -1;
+        while (res == -1) {
+            System.out.println("""
+                                            
+                        --------------------
+                        LOGADO COMO PACIENTE
+                        --------------------
+                                            
+                        Selecione uma opção:
+                                            
+                        [1] Marcar Exame Realizada
+                        [2] Listar Autorizações
+                        [3] Consultar Exames para realizar
+                        [4] Voltar ao Menu Inicial
+                        """);
+            try {
+                res = Integer.parseInt(sc.nextLine());
+
+                switch (res) {
+                    case 1:
+                       System.out.println("Escolha o Exame Realizado: ");
+                        res = -1 ;break;
+                    case 2:
+                        System.out.println("Lista de Autorizações: ");
+                        res = -1 ;break;
+                    case 3:
+                        System.out.println("Exames não realizados:");
+                        res = -1 ;break;
+                    case 4:
+                        executa();
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nValor inválido\n");
+                res = -1;
+            }}
+    }
+
     private void menuAdmnistrador(){
             int res = -1;
             while (res == -1) {
@@ -409,6 +447,8 @@ bug-fix
 
  bug-fix
         if( u instanceof Medico ) {
+
+        if(u instanceof Paciente){menuPaciente();}
 
 
         // Menu exclusivo do Administrador
