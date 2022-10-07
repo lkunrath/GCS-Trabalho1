@@ -383,6 +383,7 @@ public class GCS {
                             buscaPaciente(nomePac);
                             if(buscaPaciente(nomePac)){
                                 System.out.print("Paciente  encontrado");
+                                System.out.print(autorizacoes);
                             } else {
                                 System.out.print("Paciente não foi encontrado"); 
                             }
@@ -394,6 +395,7 @@ public class GCS {
                             buscaMedico(nomeMed);
                         if(buscaMedico(nomeMed)){
                             System.out.print("Medico  encontrado");
+                            System.out.print(autorizacoes);
                         } else {
                             System.out.print("Medico não foi encontrado"); 
                         }
