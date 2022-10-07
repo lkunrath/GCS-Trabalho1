@@ -93,31 +93,36 @@ public class Autorizacao implements Comparable<Autorizacao> {
         return (ArrayList<Exame>) exames.clone();
     }
 
+    public ArrayList<Exame> filtroPaciente(Paciente p) {
+        ArrayList<Exame> filtroNome = new ArrayList<>();
+        for (Exame value : exames) {
+            if (value.getPaciente().equals(paciente))
+                filtroNome.add(value);
+        }
+        Collections.sort(filtroNome, new SortByDate());
+        return filtroNome;
+    }
+
+
+    public ArrayList<Exame> filtroExames(TipoExame tipoExame) {
+        ArrayList<Exame> filtroExame = new ArrayList<>();
+        for (Exame value : exames) {
+            if (value.getTipoExame().equals(tipoExame))
+                filtroExame.add(value);
+        }
+        Collections.sort(filtroExame, new SortByDate());
+
+        return filtroExame;
+    }
+
     public class SortByDate implements Comparator<Exame> {
         @Override
         public int compare(Exame a, Exame b) {
             return a.getDataRealizada().compareTo(b.getDataRealizada());
         }
-
-        public List<Exame> filtroPaciente(Paciente paciente) {
-            ArrayList<Exame> filtroNome = new ArrayList<>();
-            for (Exame value : exames) {
-                if (value.getPaciente().equals(paciente))
-                    filtroNome.add(value);
-            }
-            Collections.sort(filtroNome, new SortByDate());
-            return filtroNome;
-        }
-
-        public ArrayList<Exame> filtroExames(TipoExame tipoExame){
-            ArrayList<Exame> filtroExame = new ArrayList<>();
-            for (Exame value : exames) {
-                if (value.getTipoExame().equals(tipoExame))
-                    filtroExame.add(value);
-            }
-            Collections.sort(filtroExame, new SortByDate());
-
-            return filtroExame;
-        }
     }
+
+
 }
+
+
