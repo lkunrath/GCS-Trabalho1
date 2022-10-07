@@ -44,6 +44,11 @@ public class GCS {
     }
 
     public void preCadastro( ) {
+
+        Administrador Adm = new Administrador("Administrador", TipoUsuario.ADMINISTRADOR);
+
+        administradores.add(Adm);
+
         Paciente p1 = new Paciente( "Joao", TipoUsuario.PACIENTE );
         Paciente p2 = new Paciente( "Lara", TipoUsuario.PACIENTE );
         Paciente p3 = new Paciente( "Luiz", TipoUsuario.PACIENTE );
@@ -297,6 +302,7 @@ public class GCS {
             }}
     }
 
+
     private void menuAdmnistrador(){
             int res = -1;
             while (res == -1) {
@@ -348,8 +354,9 @@ public class GCS {
                             String nom = sc.next();
                             for ( Paciente paciente : pacientes ) {
                                 if (paciente.getNome().equalsIgnoreCase(nom))
-                                    System.out.printf( "[%d] %s\n", paciente.getNome( ),"Autorização"  );
+                                    System.out.println( "Paciente: "+paciente.getNome( )+"Autorizações:"+autorizacoes.getExame());
                             }
+
                             sc.nextLine(); res = -1 ;break;
 
                         case 3:
@@ -412,11 +419,11 @@ public class GCS {
 
                             System.out.println("""
 
-                                --------------------------
-                        ADICIONAR NOVA AUTORIZAÇÃO
-                                --------------------------
+                 --------------------------
+                 ADICIONAR NOVA AUTORIZAÇÃO
+                 --------------------------
 
-                        Pacientes cadastrados:
+                 Pacientes cadastrados:
                 """);
 
         // Imprime o ID e nome de todos os pacientes cadastrados
@@ -467,7 +474,7 @@ public class GCS {
                 AUTORIZAÇÃO ADICIONADA COM SUCESSO
                 ----------------------------------
 
-                        Data: %s
+                Data: %s
                 Nome do médico: %s
                 Nome do paciente: %s
                 Exame autorizado: %s
