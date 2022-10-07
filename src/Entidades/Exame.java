@@ -2,7 +2,9 @@ package Entidades;
 
 import Enums.TipoExame;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.SimpleTimeZone;
 
 public class Exame {
 

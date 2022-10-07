@@ -124,7 +124,7 @@ public class Autorizacao implements Comparable<Autorizacao> {
             Collections.sort(filtroNome, new SortByDate());
             return filtroNome;
         }
-
+        
         public ArrayList<Exame> filtroExames(TipoExame tipoExame){
             ArrayList<Exame> filtroExame = new ArrayList<>();
             for (Exame value : exames) {
