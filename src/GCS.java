@@ -13,13 +13,17 @@ import java.util.Scanner;
 
 public class GCS {
 
+    public String[] listaPac;
+    public String[] listaMed;
     Scanner sc;
+
     ArrayList<Medico> medicos;
     ArrayList<Paciente> pacientes;
     ArrayList<Administrador> administradores;
     Date date;
 
     Autorizacao autorizacoes;
+
 
     public GCS() {
         medicos = new ArrayList<>();
@@ -33,14 +37,6 @@ public class GCS {
         Usuario usuarioAtual = selecionaUsuarioAtual();
         sc = new Scanner(System.in);
         mostrarMenu(usuarioAtual);
-
-
-
-
-
-
-
-
     }
 
     public void preCadastro( ) {
@@ -137,6 +133,7 @@ public class GCS {
                         usuario = p;
                     }
                     case 3 -> {
+
                         if (!exibirAdministradoresDisponiveis()) {
                             res = -1;
                             break;
@@ -153,6 +150,7 @@ public class GCS {
                     case 0->{
                         System.exit(0);
                         break;
+
                     }
                     default -> throw new NumberFormatException( );
                 }
@@ -162,6 +160,7 @@ public class GCS {
             }
         }
         return usuario;
+    
     }
 
     private boolean exibirMedicosDisponiveis() {
@@ -542,5 +541,4 @@ public class GCS {
             }
         }
      }
-
 }
