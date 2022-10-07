@@ -1,4 +1,4 @@
-package src.Models;
+package Models;
 
 import src.Enums.TipoUsuario;
 

@@ -1,17 +1,16 @@
-package src;
 
-import src.Entidades.*;
-import src.Enums.TipoExame;
-import src.Enums.TipoUsuario;
-import src.Models.Usuario;
+
+import Entidades.*;
+import Enums.TipoExame;
+import Enums.TipoUsuario;
+import Models.Usuario;
+
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
-
-public class GCS {
 
     Scanner sc;
 
@@ -96,6 +95,8 @@ public class GCS {
         Usuario usuario = null;
         int res = -1;
         int numId;
+
+        
 
         while ( res == -1 ) {
             System.out.println("\n");
@@ -290,6 +291,94 @@ public class GCS {
 
         ArrayList<Exame> examesFiltrados = new ArrayList<>(autorizacoes.filtroPaciente(p));
 
+
+    private void menuAdmnistrador(){
+            int res = -1;
+            while (res == -1) {
+                System.out.println("""
+                                            
+                        -------------------------
+                        LOGADO COMO ADMINISTRADOR
+                        -------------------------
+                                            
+                        Selecione uma opção:
+                                            
+                        [1] Adicionar novo usuário
+                        [2] Procurar autorizações por nome de Usuario
+                        [3] Estatisticas Gerais
+                        [4] Busca Paciente
+                        [5] Busca Medico
+                        [6] Voltar ao Menu Inicial
+                        """);
+                try {
+                    res = Integer.parseInt(sc.nextLine());
+
+                    switch (res) {
+                        case 1:
+                            System.out.println("Digite o nome do novo Usuário: ");
+                            String nome = sc.next();
+                            System.out.println("Insira o numero equivalente ao tipo de Usuário: \n [1] Médico \n [2] Paciente \n [3] Administrador ");
+                            int escolha;
+                            escolha = sc.nextInt();
+                            switch (escolha) {
+                                case 1:
+                                    Usuario medico = new Medico(nome, TipoUsuario.MEDICO);
+                                    medicos.add((Medico) medico);
+                                    System.out.println("Médico Cadastrado");
+                                    break;
+
+                                case 2:
+                                    Usuario paciente = new Paciente(nome, TipoUsuario.PACIENTE);
+                                    pacientes.add((Paciente) paciente);
+                                    System.out.println("Paciente Cadastrado");
+                                    break;
+
+                                case 3:
+                                    Usuario administrador = new Administrador(nome, TipoUsuario.ADMINISTRADOR);
+                                    administradores.add((Administrador) administrador);
+                                    System.out.println("Administrador Cadastrado");
+                                    break;
+                            } sc.nextLine(); res = -1 ;break;
+
+                        case 2:
+                            System.out.println("Digite o nome do Usuario:");
+                            String nom = sc.next();
+                            for ( Paciente paciente : pacientes ) {
+                                if (paciente.getNome().equalsIgnoreCase(nom))
+                                    System.out.println( "Paciente: "+paciente.getNome( )+"Autorizações:"+autorizacoes.getExame());
+                            }
+                        case 3:
+                            int pa = pacientes.size();
+                            int me = medicos.size();
+                            int ad = administradores.size();
+                            System.out.println("Número de Pacientes: "+ pa+ "\nNúmero de Médicos: "+ me + "\nNúmero de Administradores: "+ad);
+                            res = -1 ;break;
+                        
+                        case 4: 
+                            System.out.println("Informe o nome do paciente que deseja buscar");
+                            String nomePac = sc.nextLine();
+                            buscaPaciente(nomePac);
+                            if(buscaPaciente(nomePac)){
+                                System.out.print("Paciente  encontrado");
+                                System.out.print(autorizacoes);
+                            } else {
+                                System.out.print("Paciente não foi encontrado"); 
+                            }
+                            break;
+                        
+                        case 5:
+                            System.out.println("Informe o nome do medico que deseja buscar");
+                            String nomeMed = sc.nextLine();
+                            buscaMedico(nomeMed);
+                        if(buscaMedico(nomeMed)){
+                            System.out.print("Medico  encontrado");
+                            System.out.print(autorizacoes);
+                        } else {
+                            System.out.print("Medico não foi encontrado"); 
+                        }
+                        break;
+                        case 6: executa();
+
         if (examesFiltrados.isEmpty()) {
             System.out.println("""
                     
@@ -320,13 +409,51 @@ public class GCS {
     private void imprimeAutorizacoesPorTipo() {
         TipoExame tpEx = null;
 
+
         // Imprime todos ID e nome de todos os tipos de exames disponíveis
         System.out.println(" \nSelecione o tipo de exame: \n");
+
+
+                        case 3:
+                            int pa = pacientes.size();
+                            int me = medicos.size();
+                            int ad = administradores.size();
+                            System.out.println("Número de Pacientes: "+ pa+ "\nNúmero de Médicos: "+ me + "\nNúmero de Administradores: "+ad);
+                            res = -1 ;break;
+                        
+                        case 4: 
+                            System.out.println("Informe o nome do paciente que deseja buscar");
+                            String nomePac = sc.nextLine();
+                            buscaPaciente(nomePac);
+                            if(buscaPaciente(nomePac)){
+                                System.out.print("Paciente  encontrado");
+                                System.out.print(autorizacoes);
+                            } else {
+                                System.out.print("Paciente não foi encontrado"); 
+                            }
+                            break;
+                        
+                        case 5:
+                            System.out.println("Informe o nome do medico que deseja buscar");
+                            String nomeMed = sc.nextLine();
+                            buscaMedico(nomeMed);
+                        if(buscaMedico(nomeMed)){
+                            System.out.print("Medico  encontrado");
+                            System.out.print(autorizacoes);
+                        } else {
+                            System.out.print("Medico não foi encontrado"); 
+                        }
+                        break;
+
+
+                        
+                        case 6: executa();
 
         for (TipoExame t : TipoExame.values())
             System.out.printf("[%d] %s\n", t.getId(), t.name());
 
         int inputExame = Integer.parseInt(sc.nextLine());
+
 
         for (TipoExame e : TipoExame.values()) {
             if (e.getId() == inputExame) {
@@ -629,5 +756,24 @@ public class GCS {
         if (u instanceof Medico) {
             menuMedico(u);
         }
+     }
+
+     private boolean buscaPaciente(String nome) {
+       
+            if(pacientes.equals(nome)) {
+                return true;
+            }
+   
+        return false;
     }
-   }
+
+    private boolean buscaMedico(String nome) {
+        
+            if(medicos.equals(nome)) {
+                return true;
+            }
+        
+        return false;
+    }
+     
+}
