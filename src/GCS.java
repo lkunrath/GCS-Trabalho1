@@ -104,6 +104,7 @@ public class GCS {
                     [1]: Médico
                     [2]: Paciente
                     [3]: Administrador
+                    [0]: Sair do programa
                     """);
             try {
                 res = Integer.parseInt( sc.nextLine( ) );
@@ -147,6 +148,11 @@ public class GCS {
                         Administrador adm = getAdministradorPorId( numId );
                         if ( adm == null ) throw  new NumberFormatException();
                         usuario = adm;
+                    }
+
+                    case 0->{
+                        System.exit(0);
+                        break;
                     }
                     default -> throw new NumberFormatException( );
                 }
