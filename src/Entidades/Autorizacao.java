@@ -9,17 +9,12 @@ import java.util.*;
 public class Autorizacao {
 
     private ArrayList<Exame> exames;
-    private List<Exame> filtroNome;
-    private List<Exame> filtroTipoExame;
-
+ 
     public Autorizacao() {
         exames = new ArrayList<>();
     }
 
     public boolean adicionaExame(Exame e) {
-        for (Exame exame : exames) {
-            if (exame.getTipoExame().equals(e.getTipoExame())) return false;
-        }
         return exames.add(e);
     }
 
@@ -27,15 +22,15 @@ public class Autorizacao {
         return new ArrayList<>(exames);
     }
    
-    static class SortByDate implements Comparator<Exame> {
+    public class SortByDate implements Comparator<Exame> {
         @Override
         public int compare(Exame a, Exame b) {
             return a.getDataCadastro().compareTo(b.getDataCadastro());
         }
-    }
+    } 
     
-    public List<Exame> filtroPaciente(Paciente paciente){
-        filtroNome = new ArrayList<>();
+     public List<Exame> filtroPaciente(Paciente paciente){
+        ArrayList<Exame> filtroNome = new ArrayList<>();
         for (int i = 0; i < exames.size(); i++) {
             if(exames.get(i).getPaciente().equals(paciente))
             filtroNome.add(exames.get(i));
@@ -44,14 +39,14 @@ public class Autorizacao {
         return filtroNome;
     }
 
-    public List<Exame> filtroTipoExames(TipoExame tipoExame){
-        filtroTipoExame = new ArrayList<>();
+    public ArrayList<Exame> filtroExames(TipoExame tipoExame){
+        ArrayList<Exame> filtroExame = new ArrayList<>();
         for (int i = 0; i < exames.size(); i++) {
             if(exames.get(i).getTipoExame().equals(tipoExame))
-            filtroTipoExame.add(exames.get(i));
+            filtroExame.add(exames.get(i));
         }
-        Collections.sort(filtroTipoExame, new SortByDate());
-        return filtroTipoExame;
-    }
+        Collections.sort(filtroExame, new SortByDate());
+        
+        return filtroExame;
+    } 
 }
-
