@@ -1,7 +1,7 @@
-package src.Entidades;
+package Entidades;
 
 import Enums.TipoUsuario;
-import src.Models.Usuario;
+import Models.Usuario;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,25 +10,23 @@ import java.util.Date;
 
 public class Paciente extends Usuario {
 
-    ArrayList<Autorizacao> autorizacoesPaciente;
-
+    ArrayList<Autorizacao> autorizacoesPaciente =new ArrayList<>();
     public Paciente(String nome, TipoUsuario tipoUsuario) {
         super(nome, tipoUsuario);
-        autorizacoesPaciente = new ArrayList<>();
     }
 
     public boolean cadastraAutorizacao(Autorizacao autorizacao){
 
-        for (Autorizacao autorizacaoAux : autorizacao.getTodasAutorizacoes()) {
+        for (Autorizacao autorizacaoAux : Autorizacao.getTodasAutorizacoes()) {
             if (autorizacaoAux.getId() == autorizacao.getId()) return false;
         }
 
-        autorizacao.adicionaAutorizacao(autorizacao);
+        Autorizacao.adicionaAutorizacao(autorizacao);
         return autorizacoesPaciente.add(autorizacao);
     }
 
     public ArrayList<Autorizacao> getAutorizacoesPaciente() {
-        return new ArrayList<>(autorizacoesPaciente);
+        return (ArrayList<Autorizacao>)autorizacoesPaciente.clone();
     }
 
     //ordena um clone, da data mais antiga ate a mais recente
