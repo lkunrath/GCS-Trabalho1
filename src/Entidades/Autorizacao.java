@@ -1,6 +1,7 @@
-package src.Entidades;
+package Entidades;
 
-import src.Enums.TipoExame;
+import Enums.TipoExame;
+import Models.Usuario;
 
 import java.util.*;
 
@@ -93,36 +94,46 @@ public class Autorizacao implements Comparable<Autorizacao> {
         return (ArrayList<Exame>) exames.clone();
     }
 
-    public ArrayList<Exame> filtroPaciente(Paciente p) {
-        ArrayList<Exame> filtroNome = new ArrayList<>();
-        for (Exame value : exames) {
-            if (value.getPaciente().equals(paciente))
-                filtroNome.add(value);
-        }
-        Collections.sort(filtroNome, new SortByDate());
-        return filtroNome;
+    public List<Exame> filtroPaciente(Paciente p) {
+        SortByDate sbd = new SortByDate();
+        return sbd.filtroPaciente(p);
     }
 
-
-    public ArrayList<Exame> filtroExames(TipoExame tipoExame) {
-        ArrayList<Exame> filtroExame = new ArrayList<>();
-        for (Exame value : exames) {
-            if (value.getTipoExame().equals(tipoExame))
-                filtroExame.add(value);
-        }
-        Collections.sort(filtroExame, new SortByDate());
-
-        return filtroExame;
+    public List<Exame> filtroExames(TipoExame tipoExame) {
+        SortByDate sbd = new SortByDate();
+        return sbd.filtroExames(tipoExame);
     }
+
 
     public class SortByDate implements Comparator<Exame> {
         @Override
         public int compare(Exame a, Exame b) {
-            return a.getDataRealizada().compareTo(b.getDataRealizada());
+            if (a.getDataRealizada() != null) {
+                return a.getDataRealizada().compareTo(b.getDataRealizada());
+            } else {
+                return 0;
+            }
+        }
+
+        public List<Exame> filtroPaciente(Paciente paciente) {
+            ArrayList<Exame> filtroNome = new ArrayList<>();
+            for (Exame value : exames) {
+                if (value.getPaciente().equals(paciente))
+                    filtroNome.add(value);
+            }
+            Collections.sort(filtroNome, new SortByDate());
+            return filtroNome;
+        }
+
+        public ArrayList<Exame> filtroExames(TipoExame tipoExame){
+            ArrayList<Exame> filtroExame = new ArrayList<>();
+            for (Exame value : exames) {
+                if (value.getTipoExame().equals(tipoExame))
+                    filtroExame.add(value);
+            }
+            Collections.sort(filtroExame, new SortByDate());
+
+            return filtroExame;
         }
     }
-
-
 }
-
-

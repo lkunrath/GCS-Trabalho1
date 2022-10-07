@@ -1,4 +1,4 @@
-package src.Enums;
+package Enums;
 
 public enum TipoExame {
     HEMOGRAMA(1),

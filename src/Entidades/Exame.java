@@ -1,6 +1,6 @@
-package src.Entidades;
+package Entidades;
 
-import src.Enums.TipoExame;
+import Enums.TipoExame;
 
 import java.util.Date;
 
@@ -61,6 +61,10 @@ public class Exame {
 
     public void setRealizado(boolean realizado) {
         this.realizado = realizado;
+        Date date = new Date();
+        if (realizado) {
+            setDataRealizada(date);
+        }
     }
     
     public boolean getRealizado() {
@@ -80,11 +84,6 @@ public class Exame {
     }
 
     public boolean isRealizado(){
-        if (realizado) {
-            System.out.println("O exame foi realizado com sucesso!");
-            return true;
-        }
-        System.out.println("O exame não foi realizado");
-        return false;
+        return realizado;
     }
 }
