@@ -1,10 +1,7 @@
 
-
-package Entidades;
-
-import Enums.TipoUsuario;
-import Models.Usuario;
-
+package src.Entidades;
+import src.Enums.TipoUsuario;
+import src.Models.Usuario;
 
 public class Administrador extends Usuario {
 

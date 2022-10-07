@@ -1,8 +1,7 @@
 
-import Entidades.*;
-import Enums.TipoExame;
-import Enums.TipoUsuario;
-import Models.Usuario;
+import src.Entidades.*;
+import src.Enums.*;
+import src.Models.Usuario;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -77,6 +76,7 @@ public class GCS {
         c.setTime(date);
         c.add(Calendar.DATE, 0);
         Exame ex3 = new Exame(c.getTime(), m2 , p2, TipoExame.HEMOGRAMA);
+
 
         c.setTime(date);
         c.add(Calendar.DATE, -5);
@@ -248,6 +248,7 @@ public class GCS {
         return true;
     }
 
+
     private Medico getMedicoPorId(int id) {
         for (Medico m : medicos) {
             if (m.getId() == id) {
@@ -281,13 +282,14 @@ public class GCS {
         return null;
     }
 
-    private ArrayList<Exame> imprimeAutorizacoesPorIdPaciente(int id) {
+    private void imprimeAutorizacoesPorIdPaciente(int id) {
         Paciente p;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         // Atribui esse id a uma referência de paciente
         p = getPacientePorId(id);
 
+
         // Verifica se o ID está correto
         if (p == null) throw new NumberFormatException();
 
@@ -311,18 +313,18 @@ public class GCS {
 
             for (Exame e : examesFiltrados) {
                 System.out.println("\n----------------------");
-                System.out.println("Codigo: " + e.getId());
-                System.out.println("Medico: " + e.getMedico().getNome());
+                System.out.println("Código: " + e.getId());
+                System.out.println("Médico: " + e.getMedico().getNome());
                 System.out.println("Paciente: " + e.getPaciente().getNome());
                 System.out.println("Tipo de Exame: " + e.getTipoExame());
-                System.out.println("Ja realizado: " + (e.getRealizado() ? "Sim" : "Nao"));
-                System.out.println("Data Cadastro: " + simpleDateFormat.format(e.getDataCadastro()));
-                System.out.println("Data Realizada: " + (e.getDataRealizada() == null ? "-" : simpleDateFormat.format(e.getDataRealizada())));
+                System.out.println("Já realizado: " + (e.getRealizado() ? "Sim" : "Não"));
+                System.out.println("Data do cadastro: " + simpleDateFormat.format(e.getDataCadastro()));
+                System.out.println("Data da realização: " + (e.getDataRealizada() == null ? "-" : simpleDateFormat.format(e.getDataRealizada())));
             }
         }
-        return examesFiltrados;
     }
-    private ArrayList<Exame> imprimeAutorizacoesPorPaciente(Paciente p) {
+    
+    private void imprimeAutorizacoesPorPaciente(Paciente p) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         // Verifica se o ID está correto
@@ -348,45 +350,13 @@ public class GCS {
 
             for (Exame e : examesFiltrados) {
                 System.out.println("\n----------------------");
-                System.out.println("Codigo: " + e.getId());
-                System.out.println("Medico: " + e.getMedico().getNome());
+                System.out.println("Código: " + e.getId());
+                System.out.println("Módico: " + e.getMedico().getNome());
                 System.out.println("Paciente: " + e.getPaciente().getNome());
-                System.out.println("Tipo de Exame: " + e.getTipoExame());
-                System.out.println("Ja realizado: " + (e.getRealizado() ? "Sim" : "Nao"));
-                System.out.println("Data Cadastro: " + simpleDateFormat.format(e.getDataCadastro()));
-                System.out.println("Data Realizada: " + (e.getDataRealizada() == null ? "-" : simpleDateFormat.format(e.getDataRealizada())));
-            }
-        }
-        return examesFiltrados;
-    }
-    private ArrayList<Exame> imprimeAutorizacoesNaoRealizadasPorPaciente(Paciente p) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        ArrayList<Exame> examesPaciente = (ArrayList<Exame>) autorizacoes.filtroPaciente((Paciente) p);
-        examesPaciente.removeIf(Exame::isRealizado);
-
-        if (examesPaciente.isEmpty()) {
-            System.out.println("""
-            -----------------------
-            NENHUM EXAME AUTORIZADO
-            -----------------------
-            """);
-        } else {
-            System.out.printf("""
-            -------------------------
-            %d EXAME(S) AUTORIZADO(S)
-            -------------------------
-                                                
-            """, examesPaciente.size());
-
-            for (Exame e : examesPaciente) {
-                System.out.println("\n----------------------");
-                System.out.println("Codigo: " + e.getId());
-                System.out.println("Medico: " + e.getMedico().getNome());
-                System.out.println("Paciente: " + e.getPaciente().getNome());
-                System.out.println("Tipo de Exame: " + e.getTipoExame());
-                System.out.println("Ja realizado: " + (e.getRealizado() ? "Sim" : "Nao"));
-                System.out.println("Data Cadastro: " + simpleDateFormat.format(e.getDataCadastro()));
-                System.out.println("Data Realizada: " + (e.getDataRealizada() == null ? "-" : simpleDateFormat.format(e.getDataRealizada())));
+                System.out.println("Tipo de exame: " + e.getTipoExame());
+                System.out.println("Já realizado: " + (e.getRealizado() ? "Sim" : "Nao"));
+                System.out.println("Data do cadastro: " + simpleDateFormat.format(e.getDataCadastro()));
+                System.out.println("Data da realização: " + (e.getDataRealizada() == null ? "-" : simpleDateFormat.format(e.getDataRealizada())));
             }
         }
         return examesPaciente;
@@ -479,21 +449,20 @@ public class GCS {
     }
 
 
-    //private void adicionarNovaAutorizacao(Usuario u) {System.out.println("Adicionar nova autorização");}
-
-
     private void menuPaciente(Usuario u){
         int res = -1;
         while (res == -1) {
             System.out.printf("""
                                             
                         --------------------
-                        Ola, Paciente %s
+                        
+                        Olá, Paciente %s
+
                         --------------------
                                             
                         Selecione uma opção:
                                             
-                        [1] Marcar Exame Realizada
+                        [1] Marcar Exame como Realizado
                         [2] Listar Autorizações
                         [3] Consultar Exames para realizar
                         [4] Voltar ao Menu Inicial
@@ -516,6 +485,7 @@ public class GCS {
                         res = -1;
                     }
                     case 4 -> executa();
+                    default -> throw new NumberFormatException();
                 }
             } catch (NumberFormatException e) {
                 System.out.println("\nValor inválido\n");
@@ -650,6 +620,8 @@ public class GCS {
                             default -> throw new NumberFormatException();
                         }
                     }
+                    case 3 -> executa();
+                    default -> throw new NumberFormatException();
                 }
             } catch ( NumberFormatException e ) {
                 System.out.println( "\nValor inválido\n" );
@@ -679,7 +651,7 @@ public class GCS {
                 switch (res) {
                     case 1 -> {
                         System.out.println("Digite o nome do novo Usuário: ");
-                        String nome = sc.next();
+                        String nome = sc.nextLine();
 
                         System.out.println("Insira o numero equivalente ao tipo de Usuário: \n [1] Médico \n [2] Paciente \n [3] Administrador ");
                         int escolha = sc.nextInt();
@@ -722,6 +694,7 @@ public class GCS {
                         res = -1;
                     }
                     case 4 -> executa();
+                    default -> throw new NumberFormatException();
                 }
             } catch (NumberFormatException e) {
                 System.out.println("\nValor inválido\n");
@@ -732,12 +705,12 @@ public class GCS {
     private void mostrarMenu(Usuario u) {
 
         //Menu Exclusivo de Pacientes
-        if(u instanceof Paciente){ menuPaciente(u); }
+        if(u instanceof Paciente) {menuPaciente(u);}
 
         // Menu exclusivo do Administrador
-        if(u instanceof Administrador){ menuAdmnistrador(); }
+        if(u instanceof Administrador) {menuAdmnistrador();}
 
         // Menu exclusivo do Médico
-        if(u instanceof Medico){ menuMedico(u); }
+        if(u instanceof Medico) {menuMedico(u);}
     }
 }
