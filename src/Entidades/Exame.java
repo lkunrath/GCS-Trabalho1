@@ -63,8 +63,9 @@ public class Exame {
 
     public void setRealizado(boolean realizado) {
         this.realizado = realizado;
+        Date date = new Date();
         if (realizado) {
-            setDataRealizada(new Date());
+            setDataRealizada(date);
         }
     }
     
