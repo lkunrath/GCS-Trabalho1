@@ -407,10 +407,10 @@ public class GCS {
     private void menuPaciente(Usuario u){
         int res = -1;
         while (res == -1) {
-            System.out.println("""
+            System.out.printf("""
                                             
                         --------------------
-                        LOGADO COMO PACIENTE
+                        OLA, PACIENTE %s
                         --------------------
                                             
                         Selecione uma opção:
@@ -419,7 +419,8 @@ public class GCS {
                         [2] Listar Autorizações
                         [3] Consultar Exames para realizar
                         [4] Voltar ao Menu Inicial
-                        """);
+
+                        """, u.getNome().toUpperCase());
             try {
                 res = Integer.parseInt(sc.nextLine());
 
