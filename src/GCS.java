@@ -1,10 +1,7 @@
-package src;
-
+import Entidades.*;
 import Enums.TipoExame;
 import Enums.TipoUsuario;
-
-import src.Entidades.*;
-import src.Models.Usuario;
+import Models.Usuario;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,29 +15,22 @@ public class GCS {
     ArrayList<Paciente> pacientes;
     ArrayList<Administrador> administradores;
     Date date;
-
-    Autorizacao autorizacoes;
+    ArrayList<Autorizacao> autorizacoes;
+    ArrayList<Exame> exames;
 
     public GCS() {
         medicos = new ArrayList<>();
         pacientes = new ArrayList<>();
         administradores = new ArrayList<>();
+        autorizacoes = new ArrayList<>();
+        exames = new ArrayList<>();
         date = new Date();
-        autorizacoes = new Autorizacao();
     }
 
     public void executa() {
         Usuario usuarioAtual = selecionaUsuarioAtual();
         sc = new Scanner(System.in);
         mostrarMenu(usuarioAtual);
-
-bug-fix
-
-
-
-        if(usuarioAtual instanceof Paciente){System.out.println("Logado como Paciente");} //SOP apenas para ver se funciona, pode trocar por metodo
-
- main
     }
 
     public void preCadastro( ) {
@@ -68,23 +58,36 @@ bug-fix
         medicos.add(m4);
         medicos.add(m5);
 
-        Exame ex1 = new Exame(date, m1 , p1, TipoExame.RADIOGRAFIA);
-        Exame ex2 = new Exame(date, m5 , p5, TipoExame.CREATINA);
-        Exame ex3 = new Exame(date, m2 , p2, TipoExame.HEMOGRAMA);
-        Exame ex4 = new Exame(date, m3 , p2, TipoExame.GLICEMIA);
-        Exame ex5 = new Exame(date, m1 , p1, TipoExame.ECOCARDIOGRAMA);
+        Autorizacao a1 = new Autorizacao(date, m1, p1, TipoExame.RADIOGRAFIA);
+        Autorizacao a2 = new Autorizacao(date, m2, p2, TipoExame.CREATINA);
+        Autorizacao a3 = new Autorizacao(date, m3, p3, TipoExame.HEMOGRAMA);
+        Autorizacao a4 = new Autorizacao(date, m4, p4, TipoExame.GLICEMIA);
+        Autorizacao a5 = new Autorizacao(date, m5, p5, TipoExame.ECOCARDIOGRAMA);
 
-        autorizacoes.adicionaExame(ex1);
-        autorizacoes.adicionaExame(ex2);
-        autorizacoes.adicionaExame(ex3);
-        autorizacoes.adicionaExame(ex4);
-        autorizacoes.adicionaExame(ex5);
+        autorizacoes.add(a1);
+        autorizacoes.add(a2);
+        autorizacoes.add(a3);
+        autorizacoes.add(a4);
+        autorizacoes.add(a5);
+
+        Exame ex1 = new Exame(date, a1);
+        Exame ex2 = new Exame(date, a2);
+        Exame ex3 = new Exame(date, a3);
+        Exame ex4 = new Exame(date, a4);
+        Exame ex5 = new Exame(date, a5);
+
+        exames.add(ex1);
+        exames.add(ex2);
+        exames.add(ex3);
+        exames.add(ex4);
+        exames.add(ex5);
     }
+    
     private Usuario selecionaUsuarioAtual( ) {
         sc = new Scanner( System.in );
         Usuario usuario = null;
         int res = -1;
-        int numId;
+        String nome;
 
         while ( res == -1 ) {
             System.out.println("\n");
@@ -105,43 +108,22 @@ bug-fix
 
                 switch ( res ) {
                     case 1 -> {
-                        if (!exibirMedicosDisponiveis()) {
-                            res = -1;
-                            break;
-                        }
-
-                        System.out.print( "\nNumero do médico: " );
-                        numId = Integer.parseInt( sc.nextLine( ) );
-
-                        Medico m = getMedicoPorId( numId );
-                        if ( m == null ) throw new NumberFormatException( );
-                        usuario = m;
+                        System.out.print( "\nNome do médico: " );
+                        nome = sc.nextLine( );
+                        usuario = new Medico( nome, TipoUsuario.MEDICO );
+                        medicos.add( (Medico) usuario);
                     }
                     case 2 -> {
-                        if (!exibirPacientesDisponiveis()) {
-                            res = -1;
-                            break;
-                        }
-
-                        System.out.print( "Numero do paciente: " );
-                        numId = Integer.parseInt( sc.nextLine( ) );
-
-                        Paciente p = getPacientePorId( numId );
-                        if ( p == null ) throw new NumberFormatException( );
-                        usuario = p;
+                        System.out.print( "Nome do paciente: " );
+                        nome = sc.nextLine( );
+                        usuario = new Paciente( nome, TipoUsuario.PACIENTE );
+                        pacientes.add( (Paciente) usuario);
                     }
                     case 3 -> {
-                        if (!exibirAdministradoresDisponiveis()) {
-                            res = -1;
-                            break;
-                        }
-
-                        System.out.print( "Numero do administrador: " );
-                        numId = Integer.parseInt( sc.nextLine( ) );
-
-                        Administrador adm = getAdministradorPorId( numId );
-                        if ( adm == null ) throw  new NumberFormatException();
-                        usuario = adm;
+                        System.out.print( "Nome do administrador: " );
+                        nome = sc.nextLine( );
+                        usuario = new Administrador( nome, TipoUsuario.ADMINISTRADOR );
+                        administradores.add( (Administrador) usuario);
                     }
                     default -> throw new NumberFormatException( );
                 }
@@ -152,382 +134,199 @@ bug-fix
         }
         return usuario;
     }
- bug-fix
-    private boolean exibirMedicosDisponiveis() {
-        if (medicos.isEmpty()) {
-            System.out.println("""
-                    
-                    ========================
-                    NENHUM MEDICO DISPONIVEL
-                    ========================
-                    
-                    """);
-            return false;
-        } else {
-            System.out.printf("""
-                    
-                    =========================
-                    %d MEDICO(S) ENCONTRADO(S)
-                    =========================
-                    
-                    """, medicos.size());
-
-            for (Medico medico : medicos) {
-                System.out.printf("[%d] %s\n", medico.getId(), medico.getNome());
-            }
-        }
-        return true;
-    }
-    private boolean exibirPacientesDisponiveis() {
-        if (pacientes.isEmpty()) {
-            System.out.println("""
-                    
-                    ==========================
-                    NENHUM PACIENTE DISPONIVEL
-                    ==========================
-                    
-                    """);
-            return false;
-        } else {
-            System.out.printf("""
-                    
-                    ===========================
-                    %d PACIENTE(S) ENCONTRADO(S)
-                    ===========================
-                    
-                    """, pacientes.size());
-
-            for (Paciente paciente : pacientes) {
-                System.out.printf("[%d] %s\n", paciente.getId(), paciente.getNome());
-            }
-        }
-        return true;
-    }
-    private boolean exibirAdministradoresDisponiveis() {
-        if (administradores.isEmpty()) {
-            System.out.println("""
-                    
-                    ===============================
-                    NENHUM ADMINISTRADOR DISPONIVEL
-                    ===============================
-                    
-                    """);
-            return false;
-        } else {
-            System.out.printf("""
-                    
-                    ===================================
-                    %d ADMINISTRADORES(S) ENCONTRADO(S)
-                    ===================================
-                    
-                    """, administradores.size());
-
-            for (Administrador adm : administradores) {
-                System.out.printf("[%d] %s\n", adm.getId(), adm.getNome());
-            }
-        }
-        return true;
-    }
-
-
-    private Medico getMedicoPorId(int id) {
-        for (Medico m : medicos) {
-            if (m.getId() == id) {
-                return m;
-            }
-        }
-        return null;
-    }
-    private Paciente getPacientePorId(int id) {
-        for (Paciente p : pacientes) {
-            if (p.getId() == id) {
-                return p;
-            }
-        }
-        return null;
-    }
-    private Administrador getAdministradorPorId(int id) {
-        for (Administrador adm : administradores) {
-            if (adm.getId() == id) {
-                return adm;
-            }
-        }
-        return null;
-    }
-
-
-    private void adicionarNovaAutorizacao(Usuario u) {
-
 
     private void menuAdmnistrador(){
-            int res = -1;
-            while (res == -1) {
-                System.out.println("""
-                                            
-                        -------------------------
-                        LOGADO COMO ADMINISTRADOR
-                        -------------------------
-                                            
-                        Selecione uma opção:
-                                            
-                        [1] Adicionar novo usuário
-                        [2] Procurar autorizações por nome de Usuario
-                        [3] Estatisticas Gerais
-                        [4] Voltar ao Menu Inicial
-                        """);
-                try {
-                    res = Integer.parseInt(sc.nextLine());
-
-                    switch (res) {
-                        case 1:
-                            System.out.println("Digite o nome do novo Usuário: ");
-                            String nome = sc.next();
-                            System.out.println("Insira o numero equivalente ao tipo de Usuário: \n [1] Médico \n [2] Paciente \n [3] Administrador ");
-                            int escolha;
-                            escolha = sc.nextInt();
-                            switch (escolha) {
-                                case 1:
-                                    Usuario medico = new Medico(nome, TipoUsuario.MEDICO);
-                                    medicos.add((Medico) medico);
-                                    System.out.println("Médico Cadastrado");
-                                    break;
-
-                                case 2:
-                                    Usuario paciente = new Paciente(nome, TipoUsuario.PACIENTE);
-                                    pacientes.add((Paciente) paciente);
-                                    System.out.println("Paciente Cadastrado");
-                                    break;
-
-                                case 3:
-                                    Usuario administrador = new Administrador(nome, TipoUsuario.ADMINISTRADOR);
-                                    administradores.add((Administrador) administrador);
-                                    System.out.println("Administrador Cadastrado");
-                                    break;
-                            } sc.nextLine(); res = -1 ;break;
-
-                        case 2:
-                            System.out.println("Digite o nome do Usuario:");
-                            String nom = sc.next();
-                            for ( Paciente paciente : pacientes ) {
-                                if (paciente.getNome().equalsIgnoreCase(nom))
-                                    System.out.printf( "[%d] %s\n", paciente.getNome( ),"Autorização"  );
-                            }
-                            sc.nextLine(); res = -1 ;break;
-
-                        case 3:
-                            int pa = pacientes.size();
-                            int me = medicos.size();
-                            int ad = administradores.size();
-                            System.out.println("Número de Pacientes: "+ pa+ "\nNúmero de Médicos: "+ me + "\nNúmero de Administradores: "+ad);
-                            res = -1 ;break;
-
-                        case 4: executa();
-
-
-
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("\nValor inválido\n");
-                    res = -1;
-                }}
-        }
-
-    private void mostrarMenu( Usuario u ) {
-        sc = new Scanner( System.in );
- main
+        int res = -1;
         String pattern = "HH:mm:ss dd-MM-yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        Paciente p = null;
-        TipoExame tipoExame = null;
-        Exame exame;
-        System.out.println("""
-                                                                        
-            --------------------------
-            ADICIONAR NOVA AUTORIZAÇÃO
-            --------------------------
-                                                
-            Pacientes cadastrados:
-            """);
 
-        // Imprime o ID e nome de todos os pacientes cadastrados
-        for (Paciente paciente : pacientes) {
-            System.out.printf("[%d] %s\n", paciente.getId(), paciente.getNome());
-        }
+        while (res == -1) {
+            System.out.println("""
+                                        
+                    -------------------------
+                    LOGADO COMO ADMINISTRADOR
+                    -------------------------
+                                        
+                    Selecione uma opção:
+                                        
+                    [1] Adicionar novo usuário
+                    [2] Procurar autorizações por nome de Usuario
+                    [3] Estatisticas Gerais
+                    [4] Voltar ao Menu Inicial
+                    """);
+            try {
+                res = Integer.parseInt(sc.nextLine());
 
-        // Recebe o id
-        System.out.print(" \nSelecione o paciente: ");
-        int numeroPaciente = Integer.parseInt(sc.nextLine());
+                switch (res) {
+                    case 1:
+                        System.out.println("Digite o nome do novo Usuário: ");
+                        String nome = sc.next();
+                        System.out.println("Insira o numero equivalente ao tipo de Usuário: \n [1] Médico \n [2] Paciente \n [3] Administrador ");
+                        int escolha;
+                        escolha = sc.nextInt();
+                        switch (escolha) {
+                            case 1:
+                                Medico medico = new Medico(nome, TipoUsuario.MEDICO);
+                                medicos.add(medico);
+                                System.out.println("Médico Cadastrado");
+                                break;
 
-        // Atribui esse id a uma referência de paciente
-        for (Paciente pac : pacientes) {
-            if (pac.getId() == numeroPaciente) {
-                p = pac;
-                break;
+                            case 2:
+                                Paciente paciente = new Paciente(nome, TipoUsuario.PACIENTE);
+                                pacientes.add(paciente);
+                                System.out.println("Paciente Cadastrado");
+                                break;
+
+                            case 3:
+                                Administrador administrador = new Administrador(nome, TipoUsuario.ADMINISTRADOR);
+                                administradores.add(administrador);
+                                System.out.println("Administrador Cadastrado");
+                                break;
+
+                        } sc.nextLine(); res = -1 ;break;
+
+                    case 2:
+                        System.out.println("Digite o nome do Usuario:");
+                        String nom = sc.next();
+                        int count = 0;
+                        for ( Autorizacao autorizacao : autorizacoes ) {
+                            if (autorizacao.getPaciente().getNome().equalsIgnoreCase(nom)){
+                                count++;
+                                System.out.println("\n" + count + "# Autorizacao:\nID: " + autorizacao.getId() + "\nTipo de Exame: " + autorizacao.getExame() + "\nMedico: " + autorizacao.getMedico().getNome() + "\nData da requizição: " +  simpleDateFormat.format(autorizacao.getData()));
+                            }
+                        }
+                        if (count == 0)
+                            System.out.println("Nenhuma autorização foi encontrada!");
+
+                        sc.nextLine(); res = -1 ;break;
+
+                    case 3:
+                        System.out.println("\nNúmero de Pacientes: "+ pacientes.size() + "\nNúmero de Médicos: " + medicos.size() + "\nNúmero de Administradores: " + administradores.size());
+                        res = -1 ;break;
+
+                    case 4:
+                        executa();
+                }
+            } 
+            catch (NumberFormatException e) {
+                System.out.println("\nValor inválido\n");
+                res = -1;
             }
         }
-
-        // Verifica se o ID está correto
-        if (p == null) throw new NumberFormatException();
-
-        // Imprime todos ID e nome de todos os tipos de exames disponíveis
-        System.out.print(" \nSelecione o tipo de exame: \n");
-        for (TipoExame t : TipoExame.values()) {
-            System.out.printf("[%d] %s\n", t.getId(), t.name());
-        }
-
-        // Recebe o ID do tipo de exame
-        int inputTipoExame = Integer.parseInt(sc.nextLine());
-
-        // Atribui esse id a uma referência de tipo de exame
-        for (TipoExame e : TipoExame.values()) {
-            if (e.getId() == inputTipoExame) tipoExame = e;
-        }
-
-        // Verifica se o ID está correto
-        if (tipoExame == null) throw new NumberFormatException();
-
-        // Instancia um novo objeto Exame
-        exame = new Exame(date, (Medico) u, p, tipoExame);
-        autorizacoes.adicionaExame(exame);
-
-        // Imprime uma confirmação
-        System.out.printf("""
-                                                                        
-        ----------------------------------
-        AUTORIZAÇÃO ADICIONADA COM SUCESSO
-        ----------------------------------
-                                            
-        Data: %s
-        Nome do médico: %s
-        Nome do paciente: %s
-        Exame autorizado: %s
-                                            
-        """, simpleDateFormat.format(date), u.getNome(), p.getNome(), tipoExame.name());
     }
-    private void mostrarMenu( Usuario u ) {
-        sc = new Scanner( System.in );
 
- bug-fix
-        if( u instanceof Medico ) {
+    private void menuMedico(Medico u){
+        int res = -1;
+        String pattern = "HH:mm:ss dd-MM-yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
+        while ( res == -1 ) {
+            System.out.println("""
+                
+                ------------------
+                LOGADO COMO MÉDICO
+                ------------------
+                
+                Selecione uma opção:
+                
+                [1] Adicionar nova autorização
+                [2] Listar autorizações 
+                [3] Voltar ao Menu Inicial
+                """);
 
-        // Menu exclusivo do Administrador
-        if(u instanceof Administrador){menuAdmnistrador();}
+            try {
+                res = Integer.parseInt( sc.nextLine( ) );
 
-        // Menu que só será exibido para o médico
-        if( u instanceof Medico ){
- main
-            int res = -1;
+                switch ( res ) {
+                    case 1: // Adicionar nova autorização
+                        Paciente p = null;
+                        TipoExame tipoExame = null;
+                        Autorizacao autorizacao;
 
-            while ( res == -1 ) {
-                System.out.printf("""
-                    
-                    ------------------------
-                    Bem-Vindo(a), Dr.(a) %s
-                    ------------------------
-                    
-                    Selecione uma opção:
-                    
-                    [1] Adicionar nova autorização
- bug-fix
-                    [2] Listar autorizações
-                    
-                    """, u.getNome());
-
-                    [2] Listar autorizações 
-                    [3] Voltar ao Menu Inicial
-                    """);
- main
-
-                try {
-                    res = Integer.parseInt( sc.nextLine( ) );
-
-                    switch (res) {
-                        case 1 -> adicionarNovaAutorizacao(u);
-                        case 2 -> { // lista as autorizações
-                            Paciente pacienteTeste = null;
-                            System.out.println("""
-                                            
-                                    --------------------------
-                                       LISTAR AUTORIZAÇÕES
-                                    --------------------------
-                                                                    
-                                    Filtros:
-
-                                    [1] Por paciente
-                                    [2] Por exame
-                                    """);
-                            int op = sc.nextInt();
-                            switch (op) {
-                                case 1:
-                                    // Imprime o ID e nome de todos os pacientes cadastrados
-                                    for (Paciente paciente : pacientes) {
-                                        System.out.printf("[%d] %s\n", paciente.getId(), paciente.getNome());
-                                    }
-
-                                    // Recebe o id
-                                    System.out.print(" \nSelecione o paciente: ");
-                                    int numPaciente = Integer.parseInt(sc.nextLine());
-
-                                case 2:
-                                    TipoExame tpExame = null;
-                                    // Imprime todos ID e nome de todos os tipos de exames disponíveis
-                                    System.out.print(" \nSelecione o tipo de exame: \n");
-
-                                    for (TipoExame t : TipoExame.values()) {
-                                        System.out.printf("[%d] %s\n", t.getId(), t.name());
-                                    }
-
-                                    break;
-
-                                default:
-                                    System.out.println("\nValor inválido");
-                                    res = -1;
-                            }
- bug-fix
-
-
-                            // Verifica se o ID está correto
-                            if (tipoExame == null) throw new NumberFormatException();
-
-                            // Instancia um novo objeto Exame
-                            exame = new Exame(date, (Medico) u, p, tipoExame);
-                            autorizacoes.adicionaExame(exame);
-
-                            // Imprime uma confirmação
-                            System.out.printf("""
-                                    
-                                    ----------------------------------
-                                    AUTORIZAÇÃO ADICIONADA COM SUCESSO
-                                    ----------------------------------
-                                    
-                                    Data: %s
-                                    Nome do médico: %s
-                                    Nome do paciente: %s
-                                    Exame autorizado: %s
-                                    
-                                    """, simpleDateFormat.format(date), u.getNome(), p.getNome(), tipoExame.name());
-
-                           res = -1 ;break;
-
-                         case 2: // lista as autorizações
-                            Paciente pacienteTeste = null;
-                            System.out.println("""
-                                        
+                        System.out.println("""
+                                
                                 --------------------------
-                                   LISTAR AUTORIZAÇÕES
+                                ADICIONAR NOVA AUTORIZAÇÃO
                                 --------------------------
                                 
-                                Filtros:
-
-                                [1] Por paciente
-                                [2] Por exame
-                           
+                                Pacientes cadastrados:
                                 """);
-                             
-                             int op = sc.nextInt();
-                             switch (op){
-                                case 1:
+
+                        // Imprime o ID e nome de todos os pacientes cadastrados
+                        for ( Paciente paciente : pacientes ) {
+                            System.out.printf( "[%d] %s\n", paciente.getId( ), paciente.getNome( ) );
+                        }
+
+                        // Recebe o id
+                        System.out.print(" \nSelecione o paciente: " );
+                        int numeroPaciente = Integer.parseInt( sc.nextLine( ) );
+
+                        // Atribui esse id a uma referência de paciente
+                        for ( Paciente pac : pacientes ) {
+                            if ( pac.getId( ) == numeroPaciente ) {
+                                p = pac;
+                                break;
+                            }
+                        }
+
+                        // Verifica se o ID está correto
+                        if ( p == null ) throw new NumberFormatException( );
+
+                        // Imprime todos ID e nome de todos os tipos de exames disponíveis
+                        System.out.print(" \nSelecione o tipo de exame: \n" );
+                        for ( TipoExame t : TipoExame.values( ) ) {
+                            System.out.printf( "[%d] %s\n", t.getId( ), t.name( ) );
+                        }
+
+                        // Recebe o ID do tipo de exame
+                        int inputTipoExame = Integer.parseInt( sc.nextLine( ) );
+
+                        // Atribui esse id a uma referência de tipo de exame
+                        for( TipoExame e : TipoExame.values( ) ) {
+                            if( e.getId() == inputTipoExame ) tipoExame = e;
+                        }
+
+                        // Verifica se o ID está correto
+                        if (tipoExame == null) throw new NumberFormatException();
+
+                        // Instancia um novo objeto Autorizacao
+                        autorizacao = new Autorizacao(date, u, p, tipoExame);
+                        autorizacoes.add(autorizacao);
+
+                        // Imprime uma confirmação
+                        System.out.printf("""
+                                
+                                ----------------------------------
+                                AUTORIZAÇÃO ADICIONADA COM SUCESSO
+                                ----------------------------------
+                                
+                                Data: %s
+                                Nome do médico: %s
+                                Nome do paciente: %s
+                                Exame autorizado: %s
+                                
+                                """, simpleDateFormat.format(date), u.getNome(), p.getNome(), tipoExame.name());
+
+                        res = -1 ;break;
+
+                    case 2: // lista as autorizações
+                        System.out.println("""
+                                
+                        --------------------------
+                            LISTAR AUTORIZAÇÕES
+                        --------------------------
+                        
+                        Filtros:
+
+                        [1] Por paciente
+                        [2] Por exame
+                    
+                        """);
+                        
+                        int op = sc.nextInt();
+
+                        switch (op) {
+                            case 1:
                                 // Imprime o ID e nome de todos os pacientes cadastrados
                                 for ( Paciente paciente : pacientes ) {
                                     System.out.printf( "[%d] %s\n", paciente.getId( ), paciente.getNome( ) );
@@ -537,33 +336,72 @@ bug-fix
                                 System.out.print(" \nSelecione o paciente: " );
                                 int numPaciente = Integer.parseInt( sc.next( ));
 
+                                int count = 0;
+                                for (Autorizacao autoriza: autorizacoes){
+                                    if (autoriza.getPaciente().getId() == numPaciente){
+                                        count++;
+                                        System.out.println("\n" + count + "# Autorizacao:\nID: " + autoriza.getId() + "\nTipo de Exame: " + autoriza.getExame() + "\nMedico: " + autoriza.getMedico().getNome() + "\nData da requizição: " + simpleDateFormat.format(autoriza.getData())); 
+                                    }
+                                }
+                                
+                                if (count == 0)
+                                    System.out.println("Nenhuma autorização encontrada");
+                                
+                                sc.nextLine();
+                                res = -1;
                                 break;
-                                case 2 :
-                                TipoExame tpExame = null;
+
+                            case 2 :
+                                System.out.println("[1] HEMOGRAMA\n[2] GLICEMIA\n[3] COLESTEROL\n[4] CREATINA\n[5] ELETROCARDIOGRAMA\n[6] TESTE_ERGOMETRICO\n[7] ECOCARDIOGRAMA\n[8] RAIO_X\n[9] RADIOGRAFIA\n[10] TOMOGRAFIA");
+
                                 // Imprime todos ID e nome de todos os tipos de exames disponíveis
                                 System.out.print(" \nSelecione o tipo de exame: \n");
-                                    int exames = Integer.parseInt( sc.next( ));
-                                for (TipoExame t : TipoExame.values( )) {
-                                    System.out.printf("[%d] %s\n", t.getId( ), t.name( ));
+
+                                int exameId = Integer.parseInt( sc.next( ));
+
+                                int contagem = 0;
+                                for (Autorizacao t : autorizacoes) {
+                                    if (t.getExame().getId() == exameId){
+                                        contagem++;
+                                        System.out.println("\n" + contagem + "# Autorizacao:\nID: " + t.getId() + "\nTipo de Exame: " + t.getExame() + "\nMedico: " + t.getMedico().getNome() + "\nData da requizição: " + simpleDateFormat.format(t.getData())); 
+                                    }
+                                }
+                                
+                                if (contagem == 0)
+                                    System.out.println("Nenhuma autorização encontrada");
+                                
+                                sc.nextLine();
+                                res = -1;
                                 break;
-                                }}
-                                    sc.nextLine(); res = -1 ;break;
-                             case 3: executa();
 
-
-                        default:
-                            System.out.println("\nValor inválido");
-                            res = -1;
- main
+                            default:
+                                System.out.println("\nValor inválido");
+                                res = -1;
+                                break;
                         }
-
-
-                } catch ( NumberFormatException e ) {
-                    System.out.println( "\nValor inválido\n" );
-                    res = -1;
-                
+                    case 3:
+                        executa();
                 }
+
+
+            } catch ( NumberFormatException e ) {
+                System.out.println( "\nValor inválido\n" );
+                res = -1;
+            
             }
         }
+    }
+
+    private void mostrarMenu( Usuario u ) {
+        sc = new Scanner( System.in );
+
+
+        // Menu exclusivo do Administrador
+        if(u instanceof Administrador)
+            menuAdmnistrador();
+
+        // Menu que só será exibido para o médico
+        if( u instanceof Medico )
+            menuMedico((Medico) u);
     }
 }

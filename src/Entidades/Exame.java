@@ -1,4 +1,4 @@
-package src.Entidades;
+package Entidades;
 
 import Enums.TipoExame;
 
@@ -13,16 +13,18 @@ public class Exame {
     private Paciente paciente;
     private TipoExame tipoExame;
     private boolean realizado;
+    private Autorizacao autorizacao;
+
     private Date dataRealizada;
 
-    public Exame(Date dataCadastro, Medico medico, Paciente paciente, TipoExame tipoExame) {
+    public Exame(Date dataCadastro, Autorizacao autorizacao) {
         id = globalId;
         ++globalId;
         this.dataCadastro = dataCadastro;
-        this.medico = medico;
-        this.paciente = paciente;
-        this.tipoExame = tipoExame;
-
+        this.autorizacao = autorizacao;
+        this.medico = autorizacao.getMedico();
+        this.paciente = autorizacao.getPaciente();
+        this.tipoExame = autorizacao.getExame();
         realizado = false;
         dataRealizada = null;
     }
@@ -55,6 +57,14 @@ public class Exame {
         this.paciente = paciente;
     }
 
+    public Autorizacao getAutorizacao() {
+        return autorizacao;
+    }
+
+    public void setAutorizacao(Autorizacao autorizacao){
+        this.autorizacao=autorizacao;
+    }
+
     public TipoExame getTipoExame() {
         return tipoExame;
     }
@@ -80,10 +90,7 @@ public class Exame {
     }
 
     public boolean isRealizado(){
-        if (realizado) {
-            System.out.println("O exame foi realizado com sucesso!");
-            return true;
-        }
+        if(realizado){System.out.println("O exame foi realizado com sucesso!"); return true;}
         System.out.println("O exame não foi realizado");
         return false;
     }
