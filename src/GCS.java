@@ -1,16 +1,16 @@
 
-
 import Entidades.*;
 import Enums.TipoExame;
 import Enums.TipoUsuario;
 import Models.Usuario;
-
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
+
+public class GCS {
 
     Scanner sc;
 
@@ -20,7 +20,6 @@ import java.util.Scanner;
     Date date;
     Calendar c;
     Autorizacao autorizacoes;
-
 
     public GCS() {
         medicos = new ArrayList<>();
@@ -67,22 +66,25 @@ import java.util.Scanner;
         medicos.add(m4);
         medicos.add(m5);
 
-        Exame ex1 = new Exame(date, m1 , p1, TipoExame.RADIOGRAFIA);
-        Exame ex2 = new Exame(date, m5 , p5, TipoExame.HEMOGRAMA);
-        Exame ex3 = new Exame(date, m2 , p2, TipoExame.HEMOGRAMA);
-        Exame ex4 = new Exame(date, m3 , p2, TipoExame.GLICEMIA);
-        Exame ex5 = new Exame(date, m1 , p1, TipoExame.ECOCARDIOGRAMA);
+        c.setTime(date);
+        c.add(Calendar.DATE, -12);
+        Exame ex1 = new Exame(c.getTime(), m1 , p1, TipoExame.RADIOGRAFIA);
 
+        c.setTime(date);
+        c.add(Calendar.DATE, -32);
+        Exame ex2 = new Exame(c.getTime(), m5 , p5, TipoExame.HEMOGRAMA);
 
-        ex1.setDataRealizada(c.getTime());
-        c.set(Calendar.DATE, 90);
-        ex2.setDataRealizada(c.getTime());
-        c.set(Calendar.DATE, 40);
-        ex3.setDataRealizada(c.getTime());
-        c.set(Calendar.DATE, 5);
-        ex4.setDataRealizada(c.getTime());
-        c.set(Calendar.DATE, 19);
-        ex5.setDataRealizada(c.getTime());
+        c.setTime(date);
+        c.add(Calendar.DATE, 0);
+        Exame ex3 = new Exame(c.getTime(), m2 , p2, TipoExame.HEMOGRAMA);
+
+        c.setTime(date);
+        c.add(Calendar.DATE, -5);
+        Exame ex4 = new Exame(c.getTime(), m3 , p2, TipoExame.GLICEMIA);
+
+        c.setTime(date);
+        c.add(Calendar.DATE, -1);
+        Exame ex5 = new Exame(c.getTime(), m1 , p1, TipoExame.ECOCARDIOGRAMA);
 
         autorizacoes.adicionaExame(ex1);
         autorizacoes.adicionaExame(ex2);
@@ -95,8 +97,6 @@ import java.util.Scanner;
         Usuario usuario = null;
         int res = -1;
         int numId;
-
-        
 
         while ( res == -1 ) {
             System.out.println("\n");
@@ -194,7 +194,6 @@ import java.util.Scanner;
         }
         return true;
     }
-
     private boolean exibirPacientesDisponiveis() {
         if (pacientes.isEmpty()) {
             System.out.println("""
@@ -273,111 +272,26 @@ import java.util.Scanner;
         }
         return null;
     }
+    private Exame getExamePorId(int id) {
+        for (Exame e : autorizacoes.getExames()) {
+            if (e.getId() == id) {
+                return e;
+            }
+        }
+        return null;
+    }
 
-    private void imprimeAutorizacoesPorPaciente() {
+    private ArrayList<Exame> imprimeAutorizacoesPorIdPaciente(int id) {
         Paciente p;
-
-        exibirPacientesDisponiveis();
-
-        // Recebe o id
-        System.out.print(" \nSelecione o paciente: ");
-        int numPaciente = Integer.parseInt(sc.nextLine());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         // Atribui esse id a uma referência de paciente
-        p = getPacientePorId(numPaciente);
+        p = getPacientePorId(id);
 
         // Verifica se o ID está correto
         if (p == null) throw new NumberFormatException();
 
         ArrayList<Exame> examesFiltrados = new ArrayList<>(autorizacoes.filtroPaciente(p));
-
-
-    private void menuAdmnistrador(){
-            int res = -1;
-            while (res == -1) {
-                System.out.println("""
-                                            
-                        -------------------------
-                        LOGADO COMO ADMINISTRADOR
-                        -------------------------
-                                            
-                        Selecione uma opção:
-                                            
-                        [1] Adicionar novo usuário
-                        [2] Procurar autorizações por nome de Usuario
-                        [3] Estatisticas Gerais
-                        [4] Busca Paciente
-                        [5] Busca Medico
-                        [6] Voltar ao Menu Inicial
-                        """);
-                try {
-                    res = Integer.parseInt(sc.nextLine());
-
-                    switch (res) {
-                        case 1:
-                            System.out.println("Digite o nome do novo Usuário: ");
-                            String nome = sc.next();
-                            System.out.println("Insira o numero equivalente ao tipo de Usuário: \n [1] Médico \n [2] Paciente \n [3] Administrador ");
-                            int escolha;
-                            escolha = sc.nextInt();
-                            switch (escolha) {
-                                case 1:
-                                    Usuario medico = new Medico(nome, TipoUsuario.MEDICO);
-                                    medicos.add((Medico) medico);
-                                    System.out.println("Médico Cadastrado");
-                                    break;
-
-                                case 2:
-                                    Usuario paciente = new Paciente(nome, TipoUsuario.PACIENTE);
-                                    pacientes.add((Paciente) paciente);
-                                    System.out.println("Paciente Cadastrado");
-                                    break;
-
-                                case 3:
-                                    Usuario administrador = new Administrador(nome, TipoUsuario.ADMINISTRADOR);
-                                    administradores.add((Administrador) administrador);
-                                    System.out.println("Administrador Cadastrado");
-                                    break;
-                            } sc.nextLine(); res = -1 ;break;
-
-                        case 2:
-                            System.out.println("Digite o nome do Usuario:");
-                            String nom = sc.next();
-                            for ( Paciente paciente : pacientes ) {
-                                if (paciente.getNome().equalsIgnoreCase(nom))
-                                    System.out.println( "Paciente: "+paciente.getNome( )+"Autorizações:"+autorizacoes.getExame());
-                            }
-                        case 3:
-                            int pa = pacientes.size();
-                            int me = medicos.size();
-                            int ad = administradores.size();
-                            System.out.println("Número de Pacientes: "+ pa+ "\nNúmero de Médicos: "+ me + "\nNúmero de Administradores: "+ad);
-                            res = -1 ;break;
-                        
-                        case 4: 
-                            System.out.println("Informe o nome do paciente que deseja buscar");
-                            String nomePac = sc.nextLine();
-                            buscaPaciente(nomePac);
-                            if(buscaPaciente(nomePac)){
-                                System.out.print("Paciente  encontrado");
-                                System.out.print(autorizacoes);
-                            } else {
-                                System.out.print("Paciente não foi encontrado"); 
-                            }
-                            break;
-                        
-                        case 5:
-                            System.out.println("Informe o nome do medico que deseja buscar");
-                            String nomeMed = sc.nextLine();
-                            buscaMedico(nomeMed);
-                        if(buscaMedico(nomeMed)){
-                            System.out.print("Medico  encontrado");
-                            System.out.print(autorizacoes);
-                        } else {
-                            System.out.print("Medico não foi encontrado"); 
-                        }
-                        break;
-                        case 6: executa();
 
         if (examesFiltrados.isEmpty()) {
             System.out.println("""
@@ -397,63 +311,97 @@ import java.util.Scanner;
 
             for (Exame e : examesFiltrados) {
                 System.out.println("\n----------------------");
+                System.out.println("Codigo: " + e.getId());
                 System.out.println("Medico: " + e.getMedico().getNome());
                 System.out.println("Paciente: " + e.getPaciente().getNome());
                 System.out.println("Tipo de Exame: " + e.getTipoExame());
                 System.out.println("Ja realizado: " + (e.getRealizado() ? "Sim" : "Nao"));
-                System.out.println("Data Cadastro: " + e.getDataCadastro());
-                System.out.println("Data Realizada: " + (e.getDataRealizada() == null ? "-" : e.getDataRealizada()));
+                System.out.println("Data Cadastro: " + simpleDateFormat.format(e.getDataCadastro()));
+                System.out.println("Data Realizada: " + (e.getDataRealizada() == null ? "-" : simpleDateFormat.format(e.getDataRealizada())));
             }
         }
+        return examesFiltrados;
+    }
+    private ArrayList<Exame> imprimeAutorizacoesPorPaciente(Paciente p) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        // Verifica se o ID está correto
+        if (p == null) throw new NumberFormatException();
+
+        ArrayList<Exame> examesFiltrados = new ArrayList<>(autorizacoes.filtroPaciente(p));
+
+        if (examesFiltrados.isEmpty()) {
+            System.out.println("""
+                    
+                                    ==============================
+                                    NENHUMA AUTORIZACAO ENCONTRADA
+                                    ==============================
+                                    
+                                    """);
+        } else {
+            System.out.printf("""
+                                        
+                    =================================
+                    %d AUTORIZACAO(OES) ENCONTRADA(S)
+                    =================================
+                    """, examesFiltrados.size());
+
+            for (Exame e : examesFiltrados) {
+                System.out.println("\n----------------------");
+                System.out.println("Codigo: " + e.getId());
+                System.out.println("Medico: " + e.getMedico().getNome());
+                System.out.println("Paciente: " + e.getPaciente().getNome());
+                System.out.println("Tipo de Exame: " + e.getTipoExame());
+                System.out.println("Ja realizado: " + (e.getRealizado() ? "Sim" : "Nao"));
+                System.out.println("Data Cadastro: " + simpleDateFormat.format(e.getDataCadastro()));
+                System.out.println("Data Realizada: " + (e.getDataRealizada() == null ? "-" : simpleDateFormat.format(e.getDataRealizada())));
+            }
+        }
+        return examesFiltrados;
+    }
+    private ArrayList<Exame> imprimeAutorizacoesNaoRealizadasPorPaciente(Paciente p) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        ArrayList<Exame> examesPaciente = (ArrayList<Exame>) autorizacoes.filtroPaciente((Paciente) p);
+        examesPaciente.removeIf(Exame::isRealizado);
+
+        if (examesPaciente.isEmpty()) {
+            System.out.println("""
+            -----------------------
+            NENHUM EXAME AUTORIZADO
+            -----------------------
+            """);
+        } else {
+            System.out.printf("""
+            -------------------------
+            %d EXAME(S) AUTORIZADO(S)
+            -------------------------
+                                                
+            """, examesPaciente.size());
+
+            for (Exame e : examesPaciente) {
+                System.out.println("\n----------------------");
+                System.out.println("Codigo: " + e.getId());
+                System.out.println("Medico: " + e.getMedico().getNome());
+                System.out.println("Paciente: " + e.getPaciente().getNome());
+                System.out.println("Tipo de Exame: " + e.getTipoExame());
+                System.out.println("Ja realizado: " + (e.getRealizado() ? "Sim" : "Nao"));
+                System.out.println("Data Cadastro: " + simpleDateFormat.format(e.getDataCadastro()));
+                System.out.println("Data Realizada: " + (e.getDataRealizada() == null ? "-" : simpleDateFormat.format(e.getDataRealizada())));
+            }
+        }
+        return examesPaciente;
     }
     private void imprimeAutorizacoesPorTipo() {
         TipoExame tpEx = null;
-
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         // Imprime todos ID e nome de todos os tipos de exames disponíveis
         System.out.println(" \nSelecione o tipo de exame: \n");
-
-
-                        case 3:
-                            int pa = pacientes.size();
-                            int me = medicos.size();
-                            int ad = administradores.size();
-                            System.out.println("Número de Pacientes: "+ pa+ "\nNúmero de Médicos: "+ me + "\nNúmero de Administradores: "+ad);
-                            res = -1 ;break;
-                        
-                        case 4: 
-                            System.out.println("Informe o nome do paciente que deseja buscar");
-                            String nomePac = sc.nextLine();
-                            buscaPaciente(nomePac);
-                            if(buscaPaciente(nomePac)){
-                                System.out.print("Paciente  encontrado");
-                                System.out.print(autorizacoes);
-                            } else {
-                                System.out.print("Paciente não foi encontrado"); 
-                            }
-                            break;
-                        
-                        case 5:
-                            System.out.println("Informe o nome do medico que deseja buscar");
-                            String nomeMed = sc.nextLine();
-                            buscaMedico(nomeMed);
-                        if(buscaMedico(nomeMed)){
-                            System.out.print("Medico  encontrado");
-                            System.out.print(autorizacoes);
-                        } else {
-                            System.out.print("Medico não foi encontrado"); 
-                        }
-                        break;
-
-
-                        
-                        case 6: executa();
 
         for (TipoExame t : TipoExame.values())
             System.out.printf("[%d] %s\n", t.getId(), t.name());
 
         int inputExame = Integer.parseInt(sc.nextLine());
-
 
         for (TipoExame e : TipoExame.values()) {
             if (e.getId() == inputExame) {
@@ -464,7 +412,7 @@ import java.util.Scanner;
 
         if (tpEx == null) throw new NumberFormatException();
 
-        ArrayList<Exame> examesFiltrados = autorizacoes.filtroExames(tpEx);
+        ArrayList<Exame> examesFiltrados = (ArrayList<Exame>) autorizacoes.filtroExames(tpEx);
 
         if (examesFiltrados.isEmpty()) {
             System.out.println("""
@@ -484,61 +432,96 @@ import java.util.Scanner;
 
             for (Exame e : examesFiltrados) {
                 System.out.println("\n----------------------");
+                System.out.println("Codigo: " + e.getId());
                 System.out.println("Medico: " + e.getMedico().getNome());
                 System.out.println("Paciente: " + e.getPaciente().getNome());
                 System.out.println("Tipo de Exame: " + e.getTipoExame());
                 System.out.println("Ja realizado: " + (e.getRealizado() ? "Sim" : "Nao"));
-                System.out.println("Data Cadastro: " + e.getDataCadastro());
-                System.out.println("Data Realizada: " + (e.getDataRealizada() == null ? "-" : e.getDataRealizada()));
+                System.out.println("Data Cadastro: " + simpleDateFormat.format(e.getDataCadastro()));
+                System.out.println("Data Realizada: " + (e.getDataRealizada() == null ? "-" : simpleDateFormat.format(e.getDataRealizada())));
             }
+        }
+    }
+    
+    private void autorizarExame(Paciente p) {
+        ArrayList<Exame> examesPaciente = (ArrayList<Exame>) autorizacoes.filtroPaciente(p);
+        if (examesPaciente.isEmpty()) {
+            System.out.println("""
+            -----------------------
+            NENHUM EXAME AUTORIZADO
+            -----------------------
+            """);
+            } else {
+                System.out.printf("""
+            -------------------------
+            %d EXAME(S) AUTORIZADO(S)
+            -------------------------
+            
+            """, examesPaciente.size());
+
+            imprimeAutorizacoesPorIdPaciente(p.getId());
+            System.out.print("\nSelecione o codigo do exame para confirmar: ");
+
+            int idEx = Integer.parseInt(sc.nextLine());
+
+            Exame exame = getExamePorId(idEx);
+            if (!examesPaciente.contains(exame) || exame == null) {
+                System.out.println("\nEXAME NAO EXISTE");
+                return;
+            }
+            if (exame.isRealizado()) {
+                System.out.println("\nEXAME JA REALIZADO");
+                return;
+            }
+
+            p.marcarExameRealizado(date, exame);
         }
     }
 
 
-    private void adicionarNovaAutorizacao(Usuario u) {System.out.println("Adicionar nova autorização");}
+    //private void adicionarNovaAutorizacao(Usuario u) {System.out.println("Adicionar nova autorização");}
 
 
-    private void menuPaciente(){
+    private void menuPaciente(Usuario u){
         int res = -1;
         while (res == -1) {
-            System.out.println("""
-                                      
-                   --------------------
-                   LOGADO COMO PACIENTE
-                   --------------------
-                                      
-                   Selecione uma opção:
-                                      
-                   [1] Marcar Exame Realizada
-                   [2] Listar Autorizações
-                   [3] Consultar Exames para realizar
-                   [4] Voltar ao Menu Inicial
-                   """);
+            System.out.printf("""
+                                            
+                        --------------------
+                        Ola, Paciente %s
+                        --------------------
+                                            
+                        Selecione uma opção:
+                                            
+                        [1] Marcar Exame Realizada
+                        [2] Listar Autorizações
+                        [3] Consultar Exames para realizar
+                        [4] Voltar ao Menu Inicial
+
+                        """, u.getNome().toUpperCase());
             try {
                 res = Integer.parseInt(sc.nextLine());
 
                 switch (res) {
                     case 1 -> {
-                        System.out.println("Escolha o Exame Realizado: ");
-                         res = -1;
+                        autorizarExame((Paciente) u);
+                        res = -1;
                     }
-
                     case 2 -> {
-                        System.out.println("Lista de Autorizações: ");
-                         res = -1;
+                        imprimeAutorizacoesPorPaciente((Paciente) u);
+                        res = -1;
                     }
                     case 3 -> {
-                        System.out.println("Exames não realizados:");
-                         res = -1;
+                        imprimeAutorizacoesNaoRealizadasPorPaciente((Paciente) u);
+                        res = -1;
                     }
                     case 4 -> executa();
                 }
             } catch (NumberFormatException e) {
-                System.out.println("\nValor inválido \n");
+                System.out.println("\nValor inválido\n");
                 res = -1;
             }}
     }
-
     private void menuMedico(Usuario u) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         int res = -1;
@@ -618,32 +601,32 @@ import java.util.Scanner;
 
                         // Imprime uma confirmação
                         System.out.printf("""
-                        
-                         ----------------------------------
-                         AUTORIZAÇÃO ADICIONADA COM SUCESSO
-                         ----------------------------------
-         
-                         Data: %s
-                         Nome do médico: %s
-                         Nome do paciente: %s
-                         Exame autorizado: %s
-         
-                         """, simpleDateFormat.format(date), u.getNome(), p.getNome(), tipoExame.name());
 
-                         res = -1;
+                        ----------------------------------
+                        AUTORIZAÇÃO ADICIONADA COM SUCESSO
+                        ----------------------------------
+        
+                        Data: %s
+                        Nome do médico: %s
+                        Nome do paciente: %s
+                        Exame autorizado: %s
+        
+                        """, simpleDateFormat.format(date), u.getNome(), p.getNome(), tipoExame.name());
+
+                        res = -1;
                     }
                     case 2 -> { // lista as autorizações
 
                         System.out.println("""
                                         
-                                 --------------------------
-                                    LISTAR AUTORIZAÇÕES
-                                 --------------------------
+                                --------------------------
+                                   LISTAR AUTORIZAÇÕES
+                                --------------------------
                                                                 
-                                 Filtros:
+                                Filtros:
 
-                                 [1] Por paciente
-                                 [2] Por exame
+                                [1] Por paciente
+                                [2] Por exame
                                                                 
                                 """);
 
@@ -651,89 +634,95 @@ import java.util.Scanner;
 
                         switch (op) {
                             case 1 -> {
-                                imprimeAutorizacoesPorPaciente();
-                                 res = -1;
+                                exibirPacientesDisponiveis();
+
+                                // Recebe o id
+                                System.out.print(" \nSelecione o paciente: ");
+                                int numPaciente = Integer.parseInt(sc.nextLine());
+
+                                imprimeAutorizacoesPorIdPaciente(numPaciente);
+                                res = -1;
                             }
                             case 2 -> {
                                 imprimeAutorizacoesPorTipo();
-                                 res = -1;
-                            }}}
-                    case 3 -> {  executa();  }
-                    default -> throw new NumberFormatException(); }
-
-
+                                res = -1;
+                            }
+                            default -> throw new NumberFormatException();
+                        }
+                    }
+                }
             } catch ( NumberFormatException e ) {
                 System.out.println( "\nValor inválido\n" );
                 res = -1;}
         }
     }
-
-   private void menuAdmnistrador(){
-       int res = -1;
-       while (res == -1) {
-           System.out.println("""
+    private void menuAdmnistrador(){
+        int res = -1;
+        while (res == -1) {
+            System.out.println("""
                                             
-                         -------------------------
-                         LOGADO COMO ADMINISTRADOR
-                         -------------------------
+                        -------------------------
+                        LOGADO COMO ADMINISTRADOR
+                        -------------------------
                                             
-                         Selecione uma opção:
+                        Selecione uma opção:
                                             
-                         [1] Adicionar novo usuário
-                         [2] Procurar autorizações por nome de Usuario
-                         [3] Estatisticas Gerais
-                         [4] Voltar ao Menu Inicial
+                        [1] Adicionar novo usuário
+                        [2] Procurar autorizações por nome de Usuario
+                        [3] Estatisticas Gerais
+                        [4] Voltar ao Menu Inicial
                         
                         """);
-           try {
-               res = Integer.parseInt(sc.nextLine());
+            try {
+                res = Integer.parseInt(sc.nextLine());
 
-               switch (res) {
-                   case 1 -> {
-                       System.out.println("Digite o nome do novo Usuário: ");
-                       String nome = sc.next();
-                       System.out.println("Insira o numero equivalente ao tipo de Usuário: \n [1] Médico \n [2] Paciente \n [3] Administrador ");
-                       int escolha = sc.nextInt();
+                switch (res) {
+                    case 1 -> {
+                        System.out.println("Digite o nome do novo Usuário: ");
+                        String nome = sc.next();
 
-                       switch (escolha) {
-                           case 1 -> {
-                               Medico medico = new Medico(nome, TipoUsuario.MEDICO);
-                               medicos.add(medico);
-                               System.out.println("Médico Cadastrado");
-                           }
-                           case 2 -> {
-                               Paciente paciente = new Paciente(nome, TipoUsuario.PACIENTE);
-                               pacientes.add(paciente);
-                               System.out.println("Paciente Cadastrado");
-                           }
-                           case 3 -> {
-                               Administrador administrador = new Administrador(nome, TipoUsuario.ADMINISTRADOR);
-                               administradores.add(administrador);
-                               System.out.println("Administrador Cadastrado");
-                           }
-                       }
-                       sc.nextLine();
-                       res = -1;
-                   }
-                   case 2 -> {
-                       System.out.println("Digite o nome do Usuario:");
-                       String nom = sc.next();
-                       for (Paciente paciente : pacientes) {
-                           if (paciente.getNome().equalsIgnoreCase(nom))
-                                System.out.println("Paciente: " + paciente.getNome() + "Autorizações:" + autorizacoes.getExame());
-                       }
+                        System.out.println("Insira o numero equivalente ao tipo de Usuário: \n [1] Médico \n [2] Paciente \n [3] Administrador ");
+                        int escolha = sc.nextInt();
+
+                        switch (escolha) {
+                            case 1 -> {
+                                Medico medico = new Medico(nome, TipoUsuario.MEDICO);
+                                medicos.add(medico);
+                                System.out.println("Médico Cadastrado");
+                            }
+                            case 2 -> {
+                                Paciente paciente = new Paciente(nome, TipoUsuario.PACIENTE);
+                                pacientes.add(paciente);
+                                System.out.println("Paciente Cadastrado");
+                            }
+                            case 3 -> {
+                                Administrador administrador = new Administrador(nome, TipoUsuario.ADMINISTRADOR);
+                                administradores.add(administrador);
+                                System.out.println("Administrador Cadastrado");
+                            }
+                        }
                         sc.nextLine();
                         res = -1;
-                   }
-                   case 3 -> {
-                       int pa = pacientes.size();
-                       int me = medicos.size();
-                       int ad = administradores.size();
-                       System.out.println("Número de Pacientes: " + pa + "\nNúmero de Médicos: " + me + "\nNúmero de Administradores: " + ad);
-                       res = -1;
-                   }
-                   case 4 -> executa();
-               }
+                    }
+                    case 2 -> {
+                        System.out.println("Digite o nome do Usuario:");
+                        String nom = sc.next();
+                        for (Paciente paciente : pacientes) {
+                            if (paciente.getNome().equalsIgnoreCase(nom))
+                                System.out.println("Paciente: " + paciente.getNome() + "Autorizações:" + autorizacoes.getExame());
+                        }
+                        sc.nextLine();
+                        res = -1;
+                    }
+                    case 3 -> {
+                        int pa = pacientes.size();
+                        int me = medicos.size();
+                        int ad = administradores.size();
+                        System.out.println("Número de Pacientes: " + pa + "\nNúmero de Médicos: " + me + "\nNúmero de Administradores: " + ad);
+                        res = -1;
+                    }
+                    case 4 -> executa();
+                }
             } catch (NumberFormatException e) {
                 System.out.println("\nValor inválido\n");
                 res = -1;
@@ -743,37 +732,12 @@ import java.util.Scanner;
     private void mostrarMenu(Usuario u) {
 
         //Menu Exclusivo de Pacientes
-        if (u instanceof Paciente) {
-            menuPaciente();
-        }
+        if(u instanceof Paciente){ menuPaciente(u); }
 
         // Menu exclusivo do Administrador
-        if (u instanceof Administrador) {
-            menuAdmnistrador();
-        }
+        if(u instanceof Administrador){ menuAdmnistrador(); }
 
         // Menu exclusivo do Médico
-        if (u instanceof Medico) {
-            menuMedico(u);
-        }
-     }
-
-     private boolean buscaPaciente(String nome) {
-       
-            if(pacientes.equals(nome)) {
-                return true;
-            }
-   
-        return false;
+        if(u instanceof Medico){ menuMedico(u); }
     }
-
-    private boolean buscaMedico(String nome) {
-        
-            if(medicos.equals(nome)) {
-                return true;
-            }
-        
-        return false;
-    }
-     
 }
