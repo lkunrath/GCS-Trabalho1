@@ -1,6 +1,7 @@
 package src.Entidades;
 
 import src.Enums.TipoExame;
+import src.Models.Usuario;
 
 import java.util.*;
 
@@ -93,10 +94,25 @@ public class Autorizacao implements Comparable<Autorizacao> {
         return (ArrayList<Exame>) exames.clone();
     }
 
+    public List<Exame> filtroPaciente(Paciente p) {
+        SortByDate sbd = new SortByDate();
+        return sbd.filtroPaciente(p);
+    }
+
+    public List<Exame> filtroExames(TipoExame tipoExame) {
+        SortByDate sbd = new SortByDate();
+        return sbd.filtroExames(tipoExame);
+    }
+
+
     public class SortByDate implements Comparator<Exame> {
         @Override
         public int compare(Exame a, Exame b) {
-            return a.getDataRealizada().compareTo(b.getDataRealizada());
+            if (a.getDataRealizada() != null && a.getDataRealizada() != null) {
+                return a.getDataRealizada().compareTo(b.getDataRealizada());
+            } else {
+                return 0;
+            }
         }
 
         public List<Exame> filtroPaciente(Paciente paciente) {

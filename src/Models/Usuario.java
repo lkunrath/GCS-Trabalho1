@@ -1,6 +1,6 @@
 package src.Models;
 
-import Enums.TipoUsuario;
+import src.Enums.TipoUsuario;
 
 public abstract class Usuario {
 
