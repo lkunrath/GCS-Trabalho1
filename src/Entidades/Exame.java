@@ -1,6 +1,6 @@
 package src.Entidades;
 
-import src.Enums.TipoExame;
+import Enums.TipoExame;
 
 import java.util.Date;
 
@@ -13,7 +13,6 @@ public class Exame {
     private Paciente paciente;
     private TipoExame tipoExame;
     private boolean realizado;
-
     private Date dataRealizada;
 
     public Exame(Date dataCadastro, Medico medico, Paciente paciente, TipoExame tipoExame) {
@@ -23,6 +22,7 @@ public class Exame {
         this.medico = medico;
         this.paciente = paciente;
         this.tipoExame = tipoExame;
+
         realizado = false;
         dataRealizada = null;
     }
@@ -80,7 +80,10 @@ public class Exame {
     }
 
     public boolean isRealizado(){
-        if(realizado){System.out.println("O exame foi realizado com sucesso!"); return true;}
+        if (realizado) {
+            System.out.println("O exame foi realizado com sucesso!");
+            return true;
+        }
         System.out.println("O exame não foi realizado");
         return false;
     }

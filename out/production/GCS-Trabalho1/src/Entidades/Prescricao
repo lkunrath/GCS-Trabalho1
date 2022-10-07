@@ -1,0 +1,20 @@
+package src.Entidades;
+
+import java.util.arrayList;
+import java.util.Collection;
+
+public class PrescricaoMedica() {
+    private Collection<Prescription> prescriptions = new arrayList<Prescription>;
+
+    private final String nome;
+
+    public void PrescricaoMedica(String nome){
+        this.nome = nome;
+    }
+    public void addPrescricaoMedica(Prescription prescription){
+        this.prescriptions.add(prescription);
+    }
+    public String getPrescicaoMedica(){
+        return PrescricaoMedica;
+    }
+}

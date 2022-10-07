@@ -13,7 +13,6 @@ public class Autorizacao implements Comparable<Autorizacao> {
     private Exame exame;
     private ArrayList<Exame> exames = new ArrayList<>();
 
-
     //lista com todas as autorizacoes para verificar se o codigo identificador é repetido
     private ArrayList<Autorizacao> todasAutorizacoes = new ArrayList<>();
 
@@ -99,26 +98,26 @@ public class Autorizacao implements Comparable<Autorizacao> {
         public int compare(Exame a, Exame b) {
             return a.getDataRealizada().compareTo(b.getDataRealizada());
         }
-    }
 
-    public List<Exame> filtroPaciente(Paciente paciente) {
-        ArrayList<Exame> filtroNome = new ArrayList<>();
-        for (Exame value : exames) {
-            if (value.getPaciente().equals(paciente))
-                filtroNome.add(value);
+        public List<Exame> filtroPaciente(Paciente paciente) {
+            ArrayList<Exame> filtroNome = new ArrayList<>();
+            for (Exame value : exames) {
+                if (value.getPaciente().equals(paciente))
+                    filtroNome.add(value);
+            }
+            Collections.sort(filtroNome, new SortByDate());
+            return filtroNome;
         }
-        Collections.sort(filtroNome, new SortByDate());
-        return filtroNome;
-    }
 
-    public ArrayList<Exame> filtroExames(TipoExame tipoExame){
-        ArrayList<Exame> filtroExame = new ArrayList<>();
-        for (Exame value : exames) {
-            if (value.getTipoExame().equals(tipoExame))
-                filtroExame.add(value);
+        public ArrayList<Exame> filtroExames(TipoExame tipoExame){
+            ArrayList<Exame> filtroExame = new ArrayList<>();
+            for (Exame value : exames) {
+                if (value.getTipoExame().equals(tipoExame))
+                    filtroExame.add(value);
+            }
+            Collections.sort(filtroExame, new SortByDate());
+
+            return filtroExame;
         }
-        Collections.sort(filtroExame, new SortByDate());
-
-        return filtroExame;
     }
 }

@@ -166,9 +166,7 @@ public class GCS {
             }
         }
         return usuario;
-
     }
-
 
     private boolean exibirMedicosDisponiveis() {
         if (medicos.isEmpty()) {
@@ -195,6 +193,7 @@ public class GCS {
         }
         return true;
     }
+
     private boolean exibirPacientesDisponiveis() {
         if (pacientes.isEmpty()) {
             System.out.println("""
@@ -203,6 +202,9 @@ public class GCS {
                     NENHUM PACIENTE DISPONIVEL
                     ==========================
                     
+                    [1] Adicionar nova autorização
+                    [2] Listar autorizações
+                    [3] Voltar ao Menu
                     """);
             return false;
         } else {
@@ -246,7 +248,6 @@ public class GCS {
         return true;
     }
 
-
     private Medico getMedicoPorId(int id) {
         for (Medico m : medicos) {
             if (m.getId() == id) {
@@ -271,7 +272,6 @@ public class GCS {
         }
         return null;
     }
-
 
     private void imprimeAutorizacoesPorPaciente() {
         Paciente p;
@@ -411,6 +411,7 @@ public class GCS {
             }}
     }
     private void menuMedico(Usuario u) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         int res = -1;
 
         while ( res == -1 ) {
@@ -473,6 +474,34 @@ public class GCS {
 
                         // Recebe o ID do tipo de exame
                         int inputTipoExame = Integer.parseInt(sc.nextLine());
+
+                        // Atribui esse id a uma referência de tipo de exame
+                        for( TipoExame e : TipoExame.values( ) ) {
+                            if( e.getId() == inputTipoExame ) tipoExame = e;
+                        }
+
+                        // Verifica se o ID está correto
+                        if (tipoExame == null) throw new NumberFormatException();
+
+                        // Instancia um novo objeto Exame
+                        exame = new Exame(date, (Medico) u, p, tipoExame);
+                        autorizacoes.adicionaExame(exame);
+
+                        // Imprime uma confirmação
+                        System.out.printf("""
+
+                        ----------------------------------
+                        AUTORIZAÇÃO ADICIONADA COM SUCESSO
+                        ----------------------------------
+        
+                        Data: %s
+                        Nome do médico: %s
+                        Nome do paciente: %s
+                        Exame autorizado: %s
+        
+                        """, simpleDateFormat.format(date), u.getNome(), p.getNome(), tipoExame.name());
+
+                        res = -1;
                     }
                     case 2 -> { // lista as autorizações
 
@@ -499,7 +528,7 @@ public class GCS {
                             case 2 -> {
                                 imprimeAutorizacoesPorTipo();
                                 res = -1;
-                                }
+                            }
                             default -> throw new NumberFormatException();
                         }
                     }
